@@ -1,0 +1,3 @@
+- from Crime spreadsheet, use data within "Total recorded crime" for the radius of the crime circle for each region.
+		- Make a method which sum up crime comitted within inner regions for the radius of the circle
+- Use data of inner regions to create a bar chart for 5-6 different relevent crimes e.g. Homicide, Robbery, Burglary, Drug offences, Criminal damage, Possession of weapons

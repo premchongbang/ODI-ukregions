@@ -1,0 +1,161 @@
+Region,Sub region,benefit claimants (men) ,benefit claimants (women) ,Percentage of men,Percentage of women,Percentage change men,Percentage change women
+North East,County Durham,"5,315","2,935",3.3,1.8,0.2,0.1
+North East,Darlington,"1,490",770,4.7,2.3,0.4,0.3
+North East,Hartlepool,"1,985","1,015",7,3.5,-0.1,0.5
+North East,Middlesbrough,"3,045","1,320",6.9,3,-0.2,0.2
+North East,Northumberland,"3,230","1,740",3.5,1.8,0,0.1
+North East,Redcar and Cleveland,"2,320","1,030",5.8,2.5,-0.9,0.3
+North East,Stockton-on-Tees,"2,845","1,365",4.7,2.2,0,0.2
+North East,Tyne and Wear (Met County),"15,430","8,075",4.3,2.2,0.1,0.2
+North West,Blackburn with Darwen,"1,660",930,3.6,2,-0.3,0
+North West,Blackpool,"2,645","1,315",6.1,3.1,0.5,0.5
+North West,Cheshire East,"1,700",925,1.5,0.8,0,0
+North West,Cheshire West and Chester,"1,895","1,105",1.9,1.1,0,0.1
+North West,Halton,"1,690","1,115",4.3,2.7,0.7,0.6
+North West,Warrington,"1,330",725,2,1.1,-0.4,-0.1
+North West,Cumbria,"3,440","1,790",2.3,1.2,0.1,0.1
+North West,Greater Manchester (Met County),"29,875","16,980",3.4,1.9,-0.1,0
+North West,Lancashire,"9,645","5,495",2.6,1.5,0.1,0.2
+North West,Merseyside (Met County),"17,145","9,550",3.9,2.1,-0.2,0
+Yorkshire and the humber,East Riding of Yorkshire,"2,000",995,2,1,0,0
+Yorkshire and the humber,"Kingston upon Hull, City of","4,305","2,280",4.9,2.7,-0.4,0
+Yorkshire and the humber,North East Lincolnshire,"2,340","1,240",4.8,2.5,-0.1,-0.1
+Yorkshire and the humber,North Lincolnshire,"1,565",815,3,1.6,-0.5,-0.1
+Yorkshire and the humber,York,690,350,1,0.5,0,0
+Yorkshire and the humber,North Yorkshire,"3,210","1,995",1.8,1.1,0.4,0.4
+Yorkshire and the humber,South Yorkshire (Met County),"15,010","7,800",3.4,1.8,-0.1,0
+Yorkshire and the humber,West Yorkshire (Met County),"22,385","12,225",3.1,1.7,0,0
+East midlands,Derby,"1,805","1,005",2.2,1.3,0.1,0.1
+East midlands,Leicester,"2,555","1,480",2.2,1.3,-0.4,-0.3
+East midlands,Nottingham,"5,000","2,390",4.4,2.2,0,0.1
+East midlands,Rutland,70,65,0.6,0.6,-0.1,0.1
+East midlands,Derbyshire,"4,165","2,310",1.7,0.9,0,0.1
+East midlands,Leicestershire,"2,155","1,380",1,0.7,-0.1,0
+East midlands,Lincolnshire,"4,965","2,710",2.3,1.2,0,0
+East midlands,Northamptonshire,"4,365","2,705",1.9,1.2,-0.2,0
+East midlands,Nottinghamshire,"5,160","2,875",2.1,1.1,0,0
+West midlands,Herefordshire,735,470,1.3,0.8,0.1,0.1
+West midlands,Shropshire,"1,310",710,1.4,0.8,-0.1,0
+West midlands,Stoke-on-Trent,"2,540","1,345",3.2,1.7,0.3,0.1
+West midlands,Telford and Wrekin,"1,220",715,2.2,1.3,0.3,0.1
+West midlands,Staffordshire,"3,715","2,110",1.4,0.8,0.1,0.1
+West midlands,Warwickshire,"2,465","1,655",1.4,1,0.1,0.2
+West midlands,Met County,"40,710","23,635",4.6,2.6,0.1,0.2
+West midlands,Worcestershire,"3,070","1,575",1.8,0.9,0,0
+East,Bedford,"1,365",825,2.6,1.6,-0.1,0
+East,Central Bedfordshire,885,550,1,0.6,0,0
+East,Luton,"1,685","1,040",2.4,1.5,0,0
+East,Peterborough,"1,165",725,1.9,1.2,-0.1,0
+East,Southend-on-Sea,"1,540",830,2.8,1.5,0.1,0.1
+East,Thurrock,"1,180",950,2.3,1.8,-0.2,0.1
+East,Cambridgeshire,"1,865","1,065",0.9,0.5,0,0
+East,Essex,"7,440","4,810",1.7,1.1,-0.1,0
+East,Hertfordshire,"5,125","3,210",1.4,0.9,0.1,0
+East,Norfolk,"5,475","3,085",2.1,1.2,0.2,0.3
+East,Suffolk,"4,345","2,365",2,1.1,0.3,0.2
+London,Inner London,"32,080","22,270",2.5,1.8,0.1,0
+London,Outer London,"37,715","28,190",2.2,1.6,0.2,0.2
+South east,Bracknell Forest,410,250,1.1,0.6,0.1,-0.1
+South east,Brighton and Hove,"1,970","1,165",1.9,1.2,0.1,0.1
+South east,Isle of Wight,"1,115",585,2.8,1.4,-0.1,0.1
+South east,Medway,"2,180","1,345",2.4,1.5,-0.2,0
+South east,Milton Keynes,"1,760","1,015",2.1,1.2,0.1,0
+South east,Portsmouth,"1,500",865,2,1.3,0,0.2
+South east,Reading,"1,085",675,1.9,1.3,0.3,0.2
+South east,Slough,770,560,1.6,1.2,-0.1,0
+South east,Southampton,"1,605",780,1.8,0.9,-0.2,-0.2
+South east,West Berkshire,405,260,0.8,0.5,0.1,0
+South east,Windsor and Maidenhead,490,290,1.1,0.6,0.2,0.1
+South east,Wokingham,400,225,0.8,0.5,0.1,0
+South east,Buckinghamshire,"1,875","1,120",1.2,0.7,0.1,0.1
+South east,East Sussex,"3,010","1,845",1.9,1.1,0,0.1
+South east,Hampshire,"4,120","2,495",1,0.6,0,0
+South east,Kent,"10,020","6,065",2.2,1.3,0.1,0.1
+South east,Oxfordshire,"1,855","1,085",0.8,0.5,0,0
+South east,Surrey,"3,190","1,925",0.9,0.5,0.1,0
+South east,West Sussex,"3,315","2,005",1.4,0.8,0.1,0
+South west,Bath and North East Somerset,"1,070",695,1.8,1.2,0.5,0.5
+South west,Bournemouth,"1,445",770,2.2,1.2,0.2,0.2
+South west,"Bristol, City of","3,580","1,965",2.3,1.3,0.1,0.1
+South west,Cornwall,"3,330","1,850",2.1,1.1,0,0
+South west,Isles of Scilly,5,5,1,0,0,0
+South west,North Somerset,850,490,1.4,0.8,0,0.1
+South west,Plymouth,"2,555","1,300",3,1.5,0,0
+South west,Poole,685,430,1.5,0.9,0,0
+South west,South Gloucestershire,"1,000",625,1.1,0.7,0,0
+South west,Swindon,"1,255",850,1.8,1.2,0,0.1
+South west,Torbay,"1,205",525,3.2,1.3,0.1,0
+South west,Wiltshire,"1,750","1,060",1.2,0.7,0.1,0.1
+South west,Devon,"2,970","1,745",1.3,0.8,0,0
+South west,Dorset,"1,405",795,1.2,0.7,0.1,0
+South west,Gloucestershire,"2,730","1,570",1.4,0.8,-0.1,0
+South west,Somerset,"3,190","2,090",2,1.3,0.4,0.5
+Wales,Isle of Anglesey,770,375,3.8,1.8,-0.6,-0.4
+Wales,Gwynedd,"1,055",480,2.8,1.3,-0.1,-0.1
+Wales,Conwy,"1,020",545,3.1,1.6,-0.4,0
+Wales,Denbighshire,790,390,2.9,1.4,-0.4,-0.2
+Wales,Flintshire,990,585,2.1,1.2,-0.1,0
+Wales,Wrexham,980,525,2.3,1.3,-0.3,-0.1
+Wales,Powys,570,260,1.5,0.7,-0.1,-0.1
+Wales,Ceredigion,365,165,1.5,0.7,0.1,-0.2
+Wales,Pembrokeshire,"1,140",590,3.2,1.6,-0.3,0
+Wales,Carmarthenshire,"1,400",805,2.6,1.4,0,0
+Wales,Swansea,"2,415","1,170",3.1,1.6,-0.1,-0.1
+Wales,Neath Port Talbot,"1,390",785,3.2,1.8,-0.2,-0.1
+Wales,Bridgend,"1,305",750,2.9,1.7,0.1,0.2
+Wales,Vale of Glamorgan,965,505,2.5,1.3,-0.1,0
+Wales,Cardiff,"3,625","1,795",3,1.5,-0.2,-0.1
+Wales,Rhondda Cynon Taf,"2,265","1,395",3.1,1.9,-0.4,-0.1
+Wales,Merthyr Tydfil,675,435,3.7,2.3,-0.1,0
+Wales,Caerphilly,"1,940","1,275",3.5,2.2,-0.7,-0.2
+Wales,Blaenau Gwent,985,570,4.5,2.6,-0.7,-0.5
+Wales,Torfaen,810,500,2.9,1.7,-0.5,-0.1
+Wales,Monmouthshire,440,235,1.6,0.9,-0.1,-0.1
+Wales,Newport,"1,890","1,010",4.1,2.2,-0.3,-0.3
+Scotland,Aberdeen City,"2,740","1,145",3.3,1.4,0.5,0.3
+Scotland,Aberdeenshire,"1,845",830,2.2,1,0.1,0.1
+Scotland,Angus,"1,080",465,3.1,1.3,0.1,0.1
+Scotland,Argyll and Bute,630,285,2.4,1.1,-0.1,0
+Scotland,City of Edinburgh,"3,645","1,785",2.1,1,-0.1,0
+Scotland,Clackmannanshire,625,315,3.9,1.9,-0.1,0.2
+Scotland,Dumfries and Galloway,"1,075",585,2.5,1.3,0,0.1
+Scotland,Dundee City,"2,395",910,5,1.8,-0.3,0
+Scotland,East Ayrshire,"1,850",815,4.9,2.1,0.2,0.1
+Scotland,East Dunbartonshire,620,305,1.9,0.9,0.2,0.3
+Scotland,East Lothian,"1,025",705,3.3,2.1,1,0.9
+Scotland,East Renfrewshire,460,260,1.7,0.9,0.1,0.2
+Scotland,Falkirk,"1,625",790,3.2,1.5,0.1,0.1
+Scotland,Fife,"4,230","1,955",3.8,1.6,0.2,0.1
+Scotland,Glasgow City,"9,965","4,340",4.8,2,0.1,0.1
+Scotland,Highland,"2,025","1,045",2.8,1.4,0.3,0.4
+Scotland,Inverclyde,"1,240",570,5,2.2,0.7,0.4
+Scotland,Midlothian,695,335,2.6,1.2,0.1,0.2
+Scotland,Moray,835,435,2.8,1.5,0.1,0.4
+Scotland,Na h-Eileanan Siar,255,85,3.1,1.1,-0.2,0
+Scotland,North Ayrshire,"2,270","1,155",5.7,2.6,-0.3,-0.1
+Scotland,North Lanarkshire,"4,195","2,015",3.9,1.8,-0.2,0.1
+Scotland,Orkney Islands,90,60,1.3,0.9,0,0.4
+Scotland,Perth and Kinross,845,365,1.9,0.8,0.1,0
+Scotland,Renfrewshire,"2,130",905,3.9,1.6,0,0
+Scotland,Scottish Borders,870,405,2.6,1.2,0,-0.1
+Scotland,Shetland Islands,110,30,1.5,0.4,0,0
+Scotland,South Ayrshire,"1,180",585,3.6,1.7,0,0.3
+Scotland,South Lanarkshire,"3,125","1,480",3.2,1.4,0,0
+Scotland,Stirling,645,375,2.2,1.2,0,0.1
+Scotland,West Dunbartonshire,"1,510",640,5.4,2.1,-0.3,0
+Scotland,West Lothian,"1,530",765,2.7,1.3,0.1,0.2
+Northern Ireland,Antrim and Newtownabbey,"1,400",580,3.3,1.3,-0.6,-0.1
+Northern Ireland,Ards and North Down,"1,735",685,3.7,1.4,-0.4,-0.3
+Northern Ireland,"Armagh City, Banbridge and Craigavon","1,700",875,2.6,1.3,-0.9,-0.3
+Northern Ireland,Belfast,"6,005","2,250",5.5,2,-1.1,-0.3
+Northern Ireland,Causeway Coast and Glens,"1,755",890,3.9,2,-1,-0.3
+Northern Ireland,Derry City and Strabane,"3,445","1,590",7.3,3.3,-1.5,-0.5
+Northern Ireland,Fermanagh and Omagh,"1,100",555,3,1.5,-1.1,-0.6
+Northern Ireland,Lisburn and Castlereagh,"1,070",455,2.4,1,-0.4,-0.3
+Northern Ireland,Mid and East Antrim,"1,570",670,3.7,1.5,-0.2,-0.1
+Northern Ireland,Mid Ulster,910,565,2,1.3,-0.6,-0.3
+Northern Ireland,"Newry, Mourne and Down","1,670",780,3,1.4,-1,-0.4
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,Data from,https://www.ons.gov.uk/employmentandlabourmarket/peoplenotinwork/unemployment/datasets/claimantcountbyunitaryandlocalauthorityexperimental,,,,,

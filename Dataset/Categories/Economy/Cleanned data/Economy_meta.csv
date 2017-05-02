@@ -1,0 +1,118 @@
+Region,Sub region,Gross Value Added at current basic price,Gross disposable household income (per head),Growth in gross disposable household income
+North East,Hartlepool and Stockton-on-Tees,5405.0,14669.0,-1.63
+North East,South Teesside,4641.0,14707.0,1.895
+North East,Darlington,2591.0,14414.0,-2.44
+North East,Durham CC,8042.0,15040.0,2.730
+North East,Northumberland,5029.0,17756.0,-0.39
+North East,Tyneside,18224.0,14995.0,1.650
+North East,Sunderland,5745.0,14435.0,0.125
+North West,Cumbria,11200.0,17150.0,-1.08
+North West,Greater Manchester,59605.0,14640.0,0.63
+North West,Blackburn with Darwen,2726.0,12096.0,-0.11
+North West,Blackpool,2146.0,13954.0,-1.05
+North West,Lancaster and Wyre,4277.0,16187.0,2.403
+North West,Lancashire,15783.0,15282.0,0.25
+North West,Cheshire,21096.0,19459.0,2.0
+North West,Merseyside and Liverpool,20750.0,14031.0,-1.6
+Yorkshire and The Humber,City of Kingston upon Hull,5129.0,12781.0,1.073
+Yorkshire and The Humber,East Riding of Yorkshire,5990.0,17445.0,2.581
+Yorkshire and The Humber,York,5068.0,16327.0,-2.31
+Yorkshire and The Humber,North Yorkshire CC,13561.0,18643.0,-2.66
+Yorkshire and The Humber,"Barnsley, Doncaster and Rotherham",13016.0,15019.0,2.275
+Yorkshire and The Humber,Sheffield,11300.0,14263.0,0.827
+Yorkshire and The Humber,Bradford,9504.0,13818.0,1.700
+Yorkshire and The Humber,Leeds,21260.0,16034.0,1.992
+Yorkshire and The Humber,Calderdale and Kirklees,11573.0,15209.0,1.282
+Yorkshire and The Humber,Wakefield,6621.0,15373.0,0.354
+East Midlands,Derby,6932.0,14331.0,2.174
+East Midlands,Derbyshire,14378.0,16046.0,0.27
+East Midlands,Nottingham,8816.0,12702.0,5.413
+East Midlands,Nottinghamshire,13964.0,16918.0,1.8
+East Midlands,Leicester,7473.0,12071.0,-0.26
+East Midlands,Leicestershire CC and Rutland,16186.0,17805.0,3.159
+East Midlands,Northamptonshire,16270.0,17670.0,1.1
+East Midlands,Lincolnshire,13869.0,16592.0,1.471
+West Midlands,Herefordshire,3883.0,17952.0,0.810
+West Midlands,Worcestershire,11796.0,17953.0,0.155
+West Midlands,Warwickshire,15119.0,18976.0,0.325
+West Midlands,Shropshire CC,6009.0,17037.0,-2.32
+West Midlands,Staffordshire CC,15225.0,16344.0,-1.53
+West Midlands,Birmingham,24790.0,13804.0,2.847
+West Midlands,Solihull,6672.0,19476.0,-1.08
+West Midlands,Coventry,7655.0,13397.0,-2.03
+East of England,Peterborough,5382.0,16097.0,3.791
+East of England,Cambridgeshire,18832.0,19691.0,3.067
+East of England,Suffolk,16901.0,17797.0,1.576
+East of England,"Norwich, Breckland and Norfolk",18545.0,16757.0,0.15
+East of England,Luton,4888.0,13775.0,-1.29
+East of England,Hertfordshire,33864.0,22380.0,1.480
+East of England,Bedfordshrie,9184.0,19266.0,4.2
+East of England,Southend-on-Sea,3132.0,17751.0,1.936
+East of England,Thurrock,3270.0,16157.0,-0.34
+East of England,Essex,31653.0,19250.0,-0.12
+London,Camden and City of London,73161.0,43735.0,3.831
+London,Westminster,53573.0,43616.0,1.831
+London,Kensington & Chelsea and Hammersmith & Fulham,21047.0,45988.0,4.831
+London,Hackney and Newham,13753.0,19199.0,4.001
+London,Tower Hamlets,28973.0,19639.0,6.470
+London,Haringey and Islington,22831.0,23602.0,2.634
+London,Lewisham and Southwark,19844.0,20756.0,7.072
+London,Lambeth,11265.0,21020.0,4.744
+London,"Merton, Kingston upon Thames and Sutton",14081.0,22104.0,1.112
+London,Harrow and Hillingdon,17773.0,21180.0,3.520
+London,Hounslow and Richmond upon Thames,17190.0,23897.0,2.102
+South East,Berkshire,35845.0,20886.0,0.032
+South East,Milton Keynes,10884.0,17518.0,0.799
+South East,Buckinghamshire CC,15231.0,23778.0,1.438
+South East,Oxfordshire,21887.0,20470.0,0.445
+South East,Brighton and Hove,7129.0,18685.0,1.468
+South East,Sussex,31048.0,20091.0,1.4
+South East,Surrey,39133.0,25151.0,-0.85
+South East,Hampshire and Isle of Wight,50234.0,16543.0,1.1
+South East,Medway,4794.0,17059.0,3.704
+South East,Kent,32990.0,18811.0,0.56
+South West,Bristol,13862.0,16887.0,2.891
+South West,"Bath and North East Somerset, North Somerset and South Gloucestershire",17923.0,19093.0,1.994
+South West,Gloucestershire,15967.0,19273.0,1.080
+South West,Swindon,6682.0,17790.0,4.094
+South West,Wiltshire,10628.0,19242.0,1.784
+South West,Bournemouth and Poole,8209.0,17648.0,-0.51
+South West,Dorset,8554.0,19823.0,1.245
+South West,Somerset,11148.0,18013.0,1.150
+South West,Cornwall and Isles of Scilly,9911.0,16862.0,2.089
+South West,Plymouth and Devon,21042.0,16782.0,2.3
+Wales,Isle of Anglesey,938.0,16238.0,1.787
+Wales,South West Wales,6027.0,15581.0,0.150
+Wales,Central Valleys,4578.0,14270.0,1.710
+Wales,Gwent Valleys,4673.0,13924.0,-0.31
+Wales,Bridgend and Neath Port Talbot,4921.0,14753.0,-0.31
+Wales,Swansea,4503.0,15186.0,4.506
+Wales,Monmouthshire and Newport,4969.0,16269.0,-0.10
+Wales,Cardiff and Vale of Glamorgan,11044.0,15763.0,0.052
+Wales,Flintshire and Wrexham,6197.0,15610.0,-1.90
+Scotland,Angus and Dundee City,5199.0,15828.0,0.769
+Scotland,Clackmannanshire and Fife,7496.0,16291.0,2.096
+Scotland,East Lothian and Midlothian,2881.0,18141.0,-1.58
+Scotland,Scottish Borders,1961.0,17872.0,2.104
+Scotland,"Edinburgh, City of",18437.0,19481.0,-1.83
+Scotland,Falkirk,2908.0,15595.0,-1.08
+Scotland,Perth & Kinross and Stirling,5472.0,18690.0,1.559
+Scotland,West Lothian,3578.0,16382.0,5.104
+Scotland,"East Dunbartonshire, West Dunbartonshire and Helensburgh & Lomond",3503.0,16888.0,-3.44
+Scotland,Dumfries & Galloway,2802.0,16654.0,0.685
+Scotland,East Ayrshire and North Ayrshire mainland,3834.0,16184.0,4.524
+Scotland,Glasgow City,19624.0,14757.0,-0.16
+Scotland,"Inverclyde, East Renfrewshire and Renfrewshire",6593.0,17261.0,1.218
+Scotland,Lanarkshire,12224.0,15763.0,0.43
+Scotland,South Ayrshire,2464.0,17069.0,-2.33
+Scotland,Aberdeen City and Aberdeenshire,18081.0,20547.0,1.524
+Scotland,Caithness & Sutherland and Ross & Cromarty,1730.0,18352.0,4.069
+Scotland,"Inverness & Nairn and Moray, Badenoch & Strathspey",4769.0,17286.0,2.457
+Scotland,"Lochaber, Skye & Lochalsh, Arran & Cumbrae and Argyll & Bute",2168.0,16126.0,-3.17
+Scotland,Eilean Siar (Western Isles),460.0,15218.0,1.219
+Scotland,Orkney and Shetland Islands,1076.0,18662.0,0.85
+Northern Ireland,Belfast,9982.0,14327.0,-1.69
+Northern Ireland,Outer Belfast,5823.0,15727.0,-1.15
+Northern Ireland,East of Northern Ireland,7661.0,15425.0,1.010
+Northern Ireland,North of Northern Ireland,4073.0,14162.0,3.796
+Northern Ireland,West and South of Northern Ireland,6871.0,13350.0,-0.17
