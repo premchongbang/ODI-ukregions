@@ -1,0 +1,90 @@
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #111; 
+    font-family: 'Helvetica Neue', 
+    sans-serif; font-size: 4vw; 
+    font-weight: bold; 
+    letter-spacing: -1px; 
+    line-height: 1; 
+    text-align: center; 
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+
+.header {
+    border: 1px solid red;
+    padding: 15px;
+}
+
+.container {
+    width: auto;
+    border: 1px solid blue;
+}
+
+.left-sub-container {
+    width: 20%;
+    float: left;
+    padding: 1px;
+    border: 1px solid red;
+    margin: 0;
+}
+
+.button-holder {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+	border: 1px solid red;
+}
+
+.button-holder li {
+    border-radius: 10px;
+    width: 90%;
+    margin: 0 0 5px 10px;
+    background-color: #33b5e5;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    text-align: center;
+    position: relative;
+    padding: 5px;
+}
+
+.button-holder li:hover {
+    background-color: #0099cc;
+}
+
+.right-sub-container {
+	width: 80%;
+    height: 60%;
+    float: left;
+    padding: 0;
+    border: 1px solid red;
+}
+
+.left {
+    width: 45%;
+    height: 60%;
+    padding: 0;
+    margin: 0;
+    float: left;
+    border: 1px solid red;
+}
+
+.right {
+    width: 55%;
+    padding: 0;
+    margin: 0;
+    float: left;
+    border: 1px solid red;
+}
+
+.footer {
+    width: 100%;
+    border: 1px solid red;
+    padding: 15px;
+    float: left;
+}
