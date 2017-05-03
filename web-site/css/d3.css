@@ -17,6 +17,21 @@
   color: #fff;
   border-radius: 2px;
 }
+.stop-up {
+	stop-color:#003300;
+}
+
+.stop-mid {
+	stop-color:#99ff99 ;
+}
+
+.stop-down{
+	stop-color: red;
+}
+
+.filled {
+	fill: url(#mainGradient);
+}
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {

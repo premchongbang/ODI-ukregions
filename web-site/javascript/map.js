@@ -31,27 +31,57 @@ function drawMap(id, pc, navid, bool){
   var svg = map.append("svg")
       .attr("width", width)
       .attr("height", newHeight);
+  
+  var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#003300","#99ff99"]);
+  //var colorScale = d3.scale.linear().range(["red","green"]);
 
   var aspect = width / height;
 
   var areas=["AB", "AL", "B", "BA", "BB", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IP", "IV", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"];
-
+  
+  var ratings= {"Scotland": 1, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
+	  
   var areadata={};
 
   _.each(areas, function(a) {
     areadata[a]=a.charCodeAt(0);
   });
 
-  var color = d3.scale.quantize().range([
-                  "rgb(198,219,239)",
-                  "rgb(158,202,225)",
-                  "rgb(107,174,214)",
-                  "rgb(66,146,198)",
-                  "rgb(33,113,181)",
-                  "rgb(8,81,156)",
-                  "rgb(8,48,107)"]);
+  //colorScale.domain([0,10]);
+  
+  var svgDefs = svg.append('defs');
 
-  color.domain(d3.extent(_.toArray(areadata)));   
+  var mainGradient = svgDefs.append('linearGradient')
+	  .attr('id', 'mainGradient')
+	  .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%");;
+
+  // Create the stops of the main gradient. Each stop will be assigned
+  // a class to style the stop using CSS.
+  mainGradient.append('stop')
+	  .attr('class', 'stop-up')
+	  .attr('offset', '0%');
+	  
+  mainGradient.append('stop')
+	  .attr('class', 'stop-mid')
+	  .attr('offset', '50%');
+
+  mainGradient.append('stop')
+	  .attr('class', 'stop-down')
+	  .attr('offset', '100%');
+  var padding = 30;
+  // Use the gradient to set the shape fill, via CSS.
+  
+  svg.append('rect')
+	  .classed('filled', true)
+	  .attr('x', width-padding)
+	  .attr('y', padding)
+	  .attr('width', 20)
+	  .attr('height', 200);
+	  
+  
 
   d3.json("data/topo_eer.json", function(error, uk) {
     var tip = d3.tip()
@@ -68,6 +98,19 @@ function drawMap(id, pc, navid, bool){
       .text( 'Map')
       .attr("font-family", "sans-serif")
       .attr("font-size", "2.5vw");
+	  
+	svg.append('text')
+      .attr('x',width*0.92)
+	  .attr('y',20)
+	  .text( '10')
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "1vw");
+	svg.append('text')
+      .attr('x',width*0.92)
+	  .attr('y',250)
+	  .text( '0')
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "1vw");
 
     svg.selectAll(".postcode_area")
       .data(topojson.feature(uk, uk.objects['eer']).features)
@@ -76,7 +119,7 @@ function drawMap(id, pc, navid, bool){
         .attr("d", path)
         .style("fill", function(d) {
           //Get data value
-          var value = areadata[d.id];
+          return colorScale(ratings[d.properties.EER13NM]);
         })
         .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();})
         .on('click', function(d){ console.log(d.properties.EER13NM); openNav(navid);})                  
