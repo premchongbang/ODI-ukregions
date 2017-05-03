@@ -1,8 +1,8 @@
 // pc = svg parent container
-function drawMap(id, pc, bool){
+function drawMap(id, pc, navid, bool){
   if(bool){
     d3.select("svg").remove();
-    drawMap("#right-sub-container-left", pc, false);
+    drawMap("#right-sub-container-left", pc, navid, false);
     return;
   }
 
@@ -14,9 +14,9 @@ function drawMap(id, pc, bool){
   console.log("width " + width + "height " + height);
 
   var aspect = (width / height) * 2;
-  var newHeight = window.height * aspect;
+  var newHeight = window.innerHeight * aspect;
   pc.style.height = newHeight + "px";
-  console.log("aspect " + aspect);
+  console.log("aspect " + aspect + " height " + newHeight);
 
   var projection = d3.geo.albers()
     .center([2, 55.4])
@@ -75,21 +75,27 @@ function drawMap(id, pc, bool){
         .attr("class", "postcode_area")
         .attr("d", path)
         .style("fill", function(d) {
-                          //Get data value
-                          var value = areadata[d.id];
-
-             }) 
-        //.on('mouseover', tip.show)
-        //.on('mouseout', tip.hide) 
-        .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();})                     
+          //Get data value
+          var value = areadata[d.id];
+        })
+        .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();})
+        .on('click', function(d){ console.log(d.properties.EER13NM); openNav(navid);})                  
         .append("svg:title")
-              .attr("transform", function (d) { return "translate(" + path.centroid(d) + ")"; })
+              .attr("transform", function (d, i) { return "translate(" + path.centroid(d) + ")"; })
               .attr("dy", ".35em")
               .text(function (d) { return d.properties.EER13NM; });
-    
+
     svg.append("path")
         .datum(topojson.mesh(uk, uk.objects['eer'], function(a, b) { return a !== b; }))
         .attr("class", "mesh")
         .attr("d", path);
   });
+}
+
+function openNav(element) {
+    element.style.height = "100%";
+}
+
+function closeNav() {
+    document.getElementById("myNav").style.height = "0%";
 }
