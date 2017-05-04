@@ -1,11 +1,15 @@
-function drawGraph(id, loc, pc, bool){
+function drawGraph(id, loc, dataName, bool){
 	var dataname = "../data/" + loc;
+
+	//delete previous chart
+	d3.select("#bargraph").remove();
 
 	var margin = {top: 80, right: 100, bottom: 80, left: 100},
 	    width = 960 - margin.left - margin.right,
 	    height = 500 - margin.top - margin.bottom;
 
 	var svg = d3.select(id).append("svg")
+		.attr("id","bargraph")
 		.attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 		.append("g")
