@@ -43,7 +43,8 @@ function drawMap(id, pc, navid, bool){
       .attr("width", width)
       .attr("height", newHeight);
   
-  var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#003300","#99ff99"]);
+  //var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#99ff99","#003300"]);
+  var colorScale = d3.scale.linear().domain([0,10]).range(["#003300","#99ff99"]);
   //var colorScale = d3.scale.linear().range(["red","green"]);
 
   var aspect = width / height;
@@ -74,10 +75,14 @@ function drawMap(id, pc, navid, bool){
   mainGradient.append('stop')
     .attr('class', 'stop-up')
     .attr('offset', '0%');
+	
+ mainGradient.append('stop')
+    .attr('class', 'stop-midup')
+    .attr('offset', '25%');
     
   mainGradient.append('stop')
-    .attr('class', 'stop-mid')
-    .attr('offset', '50%');
+    .attr('class', 'stop-middown')
+    .attr('offset', '75%');
 
   mainGradient.append('stop')
     .attr('class', 'stop-down')
@@ -155,7 +160,7 @@ function openNav(element, region) {
     //console.log("element " + element + " child " + child[3]);
     //child[3].style.background="#F8F8FF";
 
-    window.drawGraph('#overlayDisplay', 'barGraphTestingData.tsv', "test", false);
+    window.drawGraph('#overlayDisplay', region, 'Crime_Meta.csv', true);
     console.log("check");
     document.getElementById("myNav").style.height = "100%";
     console.log("end");

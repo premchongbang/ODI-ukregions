@@ -30,7 +30,7 @@
         <div class="button-holder">
           <h2 style="font-size: 2.4vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
           <ul style="padding: 0; margin: 0;">
-            <li onclick="drawGraph('#right-sub-container-right', 'barGraphTestingData.tsv', pc, false)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Education </br> <i class="fa fa-book" aria-hidden="true"> </i> </li>
+            <li onclick="drawGraph('#right-sub-container-right', '', 'Crime_Meta.csv', false)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Education </br> <i class="fa fa-book" aria-hidden="true"> </i> </li>
             <li onclick="" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Economy </br> <i class="fa fa-line-chart" aria-hidden="true"></i> </i> </li>
             <li onclick="" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Crimes </br> <i class="fa fa-ban" aria-hidden="true"></i> </li>
             <li onclick="" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Transportation </br> <i class="fa fa-truck" aria-hidden="true"></i> </i> </li>
@@ -45,9 +45,9 @@
 
       <div class="right-sub-container" id="sub-container">
         <div id="myNav" class="overlay">
+		  <div id="drop" align=center></div>
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav('myNav')">&times;</a>
           <div class="overlay-content" id="overlayDisplay">
-          
           </div>
         </div>
 
@@ -56,7 +56,7 @@
         </div>
 
         <div class ="right-sub-container right" id="right-sub-container-right">
-
+		  <div id="drop2" align=center></div>
         </div>
       </div>
     </div>

@@ -9,6 +9,16 @@
   stroke-width: .5px;
   stroke-linejoin: round;
 }
+
+.stop-up{
+	stop-color:#99ff99;
+}
+.stop-down{
+	stop-color:#003300;
+}
+.filled {
+                fill: url(#mainGradient);
+}
 .d3-tip {
   line-height: 1;
   font-weight: bold;
