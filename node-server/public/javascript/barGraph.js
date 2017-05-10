@@ -4,8 +4,8 @@ function drawGraph(id, region, dataName, filter){
 	//delete previous chart
 	d3.select("#bargraph").remove();
     d3.select("select").remove();
-	var margin = {top: 80, right: 100, bottom: 80, left: 100},
-	    width = 960 - margin.left - margin.right,
+	var margin = {top: 80, right: 220, bottom: 80, left: 350},
+	    width = 1100 - margin.left - margin.right,
 	    height = 500 - margin.top - margin.bottom;
 
 	var svg = d3.select(id).append("svg")
@@ -34,6 +34,7 @@ function drawGraph(id, region, dataName, filter){
 		if (filter){
 		  var data = data.filter(function(d){return d.Regions === region;});
 		}
+		
 		//console.log(region);
 		// filter year
 		
@@ -42,7 +43,7 @@ function drawGraph(id, region, dataName, filter){
 			.filter(function(d){
 				return ((d != "Regions") & (d != "Sub_Region"));
 			});*/
-		console.log(data);
+		//console.log(data);
 		var elements = data.map(function(d){ return d.Sub_Region;});
         //console.log(elements.length);
 		
@@ -50,8 +51,16 @@ function drawGraph(id, region, dataName, filter){
 		var categories = Object.keys(data[0]).filter(function(d){
 					return ((d != "Regions") & (d != "Sub_Region"));
 			});
+		
 		//console.log(categories[0]);	
 		var selection = categories[0];
+		console.log(selection);
+		
+		formated = data.map(function(d){return {Sub_Region: d.Sub_Region,
+		values:+d[selection]};
+	});
+	
+	console.log(formated);
 		//console.log(categories);
 		var x = d3.scale.linear()
 				.domain([0, d3.max(data, function(d){
@@ -77,7 +86,7 @@ function drawGraph(id, region, dataName, filter){
 	    	.attr("transform", "translate(0, 0)")
 	    	.call(xAxis)
 	    	.selectAll("text")
-	    	.style("font-size", "12px")
+	    	.style("font-size", "10px")
 	      	.style("text-anchor", "end")
 	      	.attr("dx", "-.8em")
 	      	.attr("dy", "-.55em");

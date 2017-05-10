@@ -42,14 +42,14 @@ function drawMap(id, pc, navid, topic){
 
   
   //var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#99ff99","#003300"]);
-  var colorScale = d3.scale.linear().domain([0,10]).range(["#003300","#99ff99"]);
+  var colorScale = d3.scale.linear().domain([0,1,10]).range(["#999999","#003300","#99ff99"]);
   //var colorScale = d3.scale.linear().range(["red","green"]);
 
   var aspect = width / height;
 
   var areas=["AB", "AL", "B", "BA", "BB", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IP", "IV", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"];
   
-  var ratings= {"Scotland": 1, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
+  var ratings= {"Scotland": 0, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
     
   var areadata={};
 
@@ -75,12 +75,9 @@ function drawMap(id, pc, navid, topic){
     .attr('offset', '0%');
 	
  mainGradient.append('stop')
-    .attr('class', 'stop-midup')
-    .attr('offset', '25%');
+    .attr('class', 'stop-mid')
+    .attr('offset', '50%');
     
-  mainGradient.append('stop')
-    .attr('class', 'stop-middown')
-    .attr('offset', '75%');
 
   mainGradient.append('stop')
     .attr('class', 'stop-down')
