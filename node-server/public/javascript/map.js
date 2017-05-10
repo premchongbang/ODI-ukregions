@@ -1,20 +1,20 @@
 // pc = svg parent container
-function drawMap(id, pc, navid, topic){
+function drawMap(id, topic){
 
-  var dataname = '../data/topo_eer.json';
+  var dataname = '../data/map/topo_eer.json';
 
   d3.select("#map").remove();
 
   var map = d3.select(id);
-  
+  var pc = document.getElementById("right-sub-container-left");
+  var navid = document.getElementById("myNav");
+
   var width = pc.clientWidth,
       height = pc.clientHeight;
 
-  console.log("width " + width + "height " + height);
-
   var aspect = (width / height) * 2;
-  var newHeight = window.innerHeight * aspect;
-  pc.style.height = newHeight + "px";
+
+  console.log("width " + width + "height " + height + " new height " + height);
 
   if((aspect * 2) <= 2) {
     var projection = d3.geo.albers()
@@ -38,18 +38,17 @@ function drawMap(id, pc, navid, topic){
   var svg = map.append("svg")
       .attr("id","map")
       .attr("width", width)
-      .attr("height", newHeight);
+      .attr("height", height);
 
   
   //var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#99ff99","#003300"]);
-  var colorScale = d3.scale.linear().domain([0,1,10]).range(["#999999","#003300","#99ff99"]);
-  //var colorScale = d3.scale.linear().range(["red","green"]);
+  var colorScale = d3.scale.linear().domain([0,1,10]).range(["#999999","#003300","#99ff99"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
 
   var aspect = width / height;
 
   var areas=["AB", "AL", "B", "BA", "BB", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IP", "IV", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"];
   
-  var ratings= {"Scotland": 0, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
+  var ratings= {"Scotland": 1, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
     
   var areadata={};
 
@@ -77,7 +76,6 @@ function drawMap(id, pc, navid, topic){
  mainGradient.append('stop')
     .attr('class', 'stop-mid')
     .attr('offset', '50%');
-    
 
   mainGradient.append('stop')
     .attr('class', 'stop-down')
@@ -147,7 +145,7 @@ function drawMap(id, pc, navid, topic){
 function openNav(element, region, dataName) {
 
     console.log("topic1 " + dataName);
-    var topic = dataName.concat("_meta.csv");
+    var topic = dataName.concat("_Meta.csv");
 
     console.log("topic2 " + topic);
 
@@ -161,10 +159,37 @@ function closeNav() {
     document.getElementById("myNav").style.height = "0%";
 }
 
-function setHeight(pc){
-  var windowH = window.innerHeight;
+function getTopic(elmnt){
+  var topic = "";
+  var str = elmnt.innerHTML;
   
-  console.log("Inner Height " + (windowH * 0.75) + " height set " + windowH);
+  var strArray = str.split(" ");
+        topic = strArray[1];
 
-  pc.style.height = (windowH * 0.75) + "px";
+        if(topic == ""){
+          topic = "overall";
+        }
+        return topic;
+}
+
+function setWindowSize() {
+  var myWidth = 0, myHeight = 0;
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    myWidth = window.innerWidth;
+    myHeight = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    myWidth = document.documentElement.clientWidth;
+    myHeight = document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    myWidth = document.body.clientWidth;
+    myHeight = document.body.clientHeight;
+  }
+  
+  document.getElementById("container").style.width = myWidth + "px";
+  document.getElementById("container").style.height = (myHeight * 0.97) + "px";
+
+   //alert("height " + document.getElementById("container").style.height);
 }

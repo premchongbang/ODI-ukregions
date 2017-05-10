@@ -15,6 +15,21 @@ h1 {
     margin: 0;
 }
 
+label{
+    color: #111; 
+    font-family: 'Helvetica Neue', 
+    sans-serif; font-size: 1.5vw;
+    margin: 0 10px 10px 0;
+}
+
+select{
+    margin: 0 10px 10px 0;
+}
+
+option{
+    min-width: 80px;
+    min-height: 40px;
+}
 
 .header {
     border: 1px solid red;
@@ -24,12 +39,15 @@ h1 {
 
 .container {
     width: auto;
+    min-width: 450px;
+    min-height: 500px;
     border: 1px solid blue;
+    padding: 0 30px 0 30px;
 }
 
 .left-sub-container {
     width: 20%;
-    max-height: 610px;
+    height: 100%;
     float: left;
     padding: 1px;
     border: 1px solid red;
@@ -61,10 +79,10 @@ h1 {
 
 .right-sub-container {
 	width: 80%;
-    max-height: 610px;
+    height: 100%;
     float: left;
     padding: 0;
-    border: 1px solid red;
+    border: 1px solid blue;
 }
 
 .left {
@@ -77,7 +95,7 @@ h1 {
 
 .right {
     width: 55%;
-    padding: 0;
+    padding: 50px;
     margin: 0;
     float: left;
     border: 1px solid red;

@@ -12,18 +12,20 @@
     <!-- map -->
     <script src="javascript/map.js"></script>
     <script src="javascript/barGraph.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- css link  -->
     <link rel="stylesheet" type="text/css" href="css/d3.css"/> 
     <link rel="stylesheet" type="text/css" href="css/styles.css"/> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
   </head> 
 
   <body>
-    <div class="container">
-      <div class="left-sub-container">
+    <div class="container" id="container">
+
+      <div class="left-sub-container" id="left-container">
         <div class="header" onclick="setTopic(this)" style="cursor:pointer;">
           <h1> UK </h1>
           <h1 style="font-family: 'Trocchi', serif; font-size: 2.5vw;"> REGIONS </h1> 
@@ -31,56 +33,91 @@
 
         <div class="button-holder">
           <h2 style="font-size: 2.4vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
-            <ul style="padding: 0; margin: 0;">
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Education </br> 
-              <i class="fa fa-book" aria-hidden="true"> </i> 
-              </li>
+          <ul style="padding: 0; margin: 0;">
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Education"> Education </br> 
+            <i class="fa fa-book" aria-hidden="true"> </i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Economy </br> 
-              <i class="fa fa-line-chart" aria-hidden="true"></i> </i> 
-              </li>
+            <li onclick="setTopic(this);" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Economy"> Economy </br> 
+            <i class="fa fa-line-chart" aria-hidden="true"></i> </i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Crime </br> 
-              <i class="fa fa-ban" aria-hidden="true"></i> 
-              </li>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Crime </br> 
+            <i class="fa fa-ban" aria-hidden="true"></i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Transportation </br>
-              <i class="fa fa-truck" aria-hidden="true"></i> </i> 
-              </li>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Transportation </br>
+            <i class="fa fa-truck" aria-hidden="true"></i> </i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Social </br> 
-              <i class="fa fa-male" aria-hidden="true"></i> <i class="fa fa-female" aria-hidden="true"></i> 
-              </li>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Social </br> 
+            <i class="fa fa-male" aria-hidden="true"></i> <i class="fa fa-female" aria-hidden="true"></i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Population </br> 
-              <i class="fa fa-users" aria-hidden="true"></i>
-              </li>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Population </br> 
+            <i class="fa fa-users" aria-hidden="true"></i>
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Employment </br> 
-              <i class="fa fa-building-o" aria-hidden="true"></i> 
-              </li>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Employment </br> 
+            <i class="fa fa-building-o" aria-hidden="true"></i> 
+            </li>
 
-              <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Housing </br> 
-              <i class="fa fa-home" aria-hidden="true"></i> </i> 
-              </li>
-            </ul>
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Housing </br> 
+            <i class="fa fa-home" aria-hidden="true"></i> </i> 
+            </li>
+          </ul>
         </div>
-      
       </div>
 
-      <div class="right-sub-container" id="sub-container">
+      <div class="right-sub-container" id="right-container">
         <div id="myNav" class="overlay">
-      <div id="drop" align=center></div>
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav('myNav')">&times;</a>
-          <div class="overlay-content" id="overlayDisplay">
-          </div>
+          <div id="drop" align=center></div>
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav('myNav')">&times;</a>
+            <div class="overlay-content" id="overlayDisplay">
+            </div>
         </div>
 
         <div class="right-sub-container left" id="right-sub-container-left">
-
+          
         </div>
 
         <div class ="right-sub-container right" id="right-sub-container-right">
+          <label>Your preference:</label>
+          <br><br>
+          <label>Preference 1</label>
+          <select id="p1" >
+              <option selected="selected">Crime</option>
+              <option>Economy</option>
+              <option>Education</option>
+              <option>Employment</option>
+              <option>Housing</option>
+              <option>Population</option>
+              <option>Social</option>
+          </select>
+          <br>
+          <label>Preference 2</label>
+          <select id="p2" >
+              <option>Crime</option>
+              <option >Economy</option>
+              <option>Education</option>
+              <option>Employment</option>
+              <option>Housing</option>
+              <option>Population</option>
+              <option>Social</option>
+          </select>
+          <br>
+          <label>Preference 3</label>
+          <select id="p3">
+              <option>Crime</option>
+              <option>Economy</option>
+              <option >Education</option>
+              <option>Employment</option>
+              <option>Housing</option>
+              <option>Population</option>
+              <option>Social</option>
+          </select>
+          <br>
+          <input type="button" id="submits" value= "submit"></input>
       <div id="drop2" align=center></div>
         </div>
       </div>
@@ -90,42 +127,46 @@
     </div>
 
     <script type="text/javascript" language="javascript">
-      var topic = "";
+      var topic = "Crime";
       var socket = io.connect();
+      var data;
       
-      var pc = document.getElementById("right-sub-container-left");
-      var navid = document.getElementById("myNav");
-      
-      socket.on('renderMap', function(data){
-        console.log(data);
+      socket.on('renderMap', function(data2){
+        console.log(data2); 
+      });
+
+      $(document).ready(function(){
+        $("input").click(function() {
+          $.ajax({
+            type: 'GET',
+            url: '/getRating',
+            headers : {'Content-Type' : 'application/json'},
+            data: JSON.stringify({ID : this.id, p1 : $("#p1").val(), p2: $("#p1").val(), p3: $("#p1").val()}),
+            success: function(result){
+              console.log(result.aa);
+            }
+          });
+        });
       });
 
       function setTopic(elmnt){
         //getting onclicked topic
-        str = elmnt.innerHTML;
-        var strArray = str.split(" ");
-        topic = strArray[1];
-
-        if(topic == ""){
-          topic = "overall";
-        }
-
-        setHeight(pc);
-        drawMap("#right-sub-container-left", pc, navid, topic);
+        topic = getTopic(elmnt);
+        setWindowSize();
+        drawMap("#right-sub-container-left", topic);
         console.log("topic " + topic);
       }
       
       window.onload = function (){
-        setHeight(pc);
-        drawMap("#right-sub-container-left", pc, navid, topic);
+        setWindowSize();
+        drawMap("#right-sub-container-left", topic);
       }
 
       window.onresize = function(){
-        setHeight(pc);
-        drawMap("#right-sub-container-left", pc, navid, topic);
+        console.log(data);
+        setWindowSize();
+        drawMap("#right-sub-container-left", topic);      
       }
-
-
     </script>
   </body>
 </html>

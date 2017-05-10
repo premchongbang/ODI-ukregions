@@ -1,8 +1,13 @@
 var express = require('express');
 var path = require('path');
 var cons = require('consolidate');
+var helper = require('./public/javascript/servercode.js');
+var bodyParser = require('body-parser');
 
 var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // socket io connection
 var server = require('http').Server(app);
@@ -19,9 +24,6 @@ app.set('view engine', 'html');
 //setting port 
 app.set('port', process.env.PORT || 8080);
 
-//store category topic
-var topics = "";
-
 // This responds with "Hello World" on the homepage
 app.get('/', function (req, res) {
    console.log("Got a GET request for the homepage");
@@ -31,56 +33,49 @@ app.get('/', function (req, res) {
 // This responds a POST request for the homepage
 app.post('/', function (req, res) {
    console.log("Got a POST request for the homepage");
-   res.send('index1.html');
+   res.render('index1.html');
 })
 
-app.post('/getdata', function (req, res) {
-   var pageBody = req.body;
-   console.log("body " + pageBody);
+app.post('/getData', function (req, res) {
+
+   console.log("body " + req.body.ID);
+
+   for(key in req.body){
+    console.log("key " + key);
+   }
    console.log("Data topic changed");
-   res.send('/public/data/topo_eer.json');
-})
-
-// This responds a DELETE request for the /del_user page.
-app.delete('/del_user', function (req, res) {
-   console.log("Got a DELETE request for /del_user");
-   res.send('Hello DELETE');
-})
-
-// This responds a GET request for the /list_user page.
-app.get('/list_user', function (req, res) {
-   console.log("Got a GET request for /list_user");
-   res.send('Page Listing');
+   res.redirect('/');
 })
 
 // This responds a GET request for abcd, abxcd, ab123cd, and so on
-app.get('/ab*cd', function(req, res) {   
-   console.log("Got a GET request for /ab*cd");
-   res.send('Page Pattern Match');
+app.get('/getRating', function(req, res) {
+  helper.getRegionalRating();
+  var newrating = helper.getPreferenceRating();
+  
+  for(var i;i<newrating.length;i++){
+    console.log(rating[i].region);
+    console.log(rating[i].rating);
+  }
+
+  console.log(data);
+  res.send({aa:1, bb:2});
 })
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.type('text/html');
-  res.status(404);
-  res.render('404');
+  res.status(200);
 });
 
-// error handlers
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500);
-  res.render('500');
-});
 
 io.on('connection', function(socket){
-   var finalPackage = "test";
-   console.log('User Connected');
-   socket.emit('renderMap', finalPackage);
-   socket.on('disconnect', function(){
+  console.log('User Connected');
+  var data = "Welcome";
+  socket.emit('renderMap', data);
+  socket.on('disconnect', function(){
       console.log('User Disconnected');
-   });
+  });
 });
 
 server.listen(app.get('port'), function(){
