@@ -4,7 +4,7 @@ function drawGraph(id, region, dataName, filter){
 	//delete previous chart
 	d3.select("#bargraph").remove();
     d3.select("select").remove();
-	var margin = {top: 80, right: 220, bottom: 80, left: 350},
+	var margin = {top: 80, right: 220, bottom: 80, left: 370},
 	    width = 1100 - margin.left - margin.right,
 	    height = 500 - margin.top - margin.bottom;
 
@@ -90,8 +90,14 @@ function drawGraph(id, region, dataName, filter){
 	      	.style("text-anchor", "end")
 	      	.attr("dx", "-.8em")
 	      	.attr("dy", "-.55em");
-
-
+        var h = height/2-margin.up;
+		var w = -margin.left+20;
+        svg.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ w +","+height/3+")rotate(-90)")
+			.style("font-size", "12px")
+	      	.style("text-anchor", "end")
+            .text("Region/Sub Regions");
 	 	svg.append("g")
 	    	.attr("class", "y axis")
 	    	.call(yAxis);
@@ -116,7 +122,7 @@ function drawGraph(id, region, dataName, filter){
 			.text(function(d){
 				return d.Sub_Region + " : " + d[selection];
 			});
-
+       
 		//var selector = d3.select("#drop")
 	    	//.append("select")
 			selector
