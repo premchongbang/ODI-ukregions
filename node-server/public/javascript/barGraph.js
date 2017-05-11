@@ -1,5 +1,5 @@
 function drawGraph(id, region, dataName, filter){
-	var dataname = '../data/'+ dataName;
+	var dataname = '../data/cat/'+ dataName;
 
 	//delete previous chart
 	d3.select("#bargraph").remove();

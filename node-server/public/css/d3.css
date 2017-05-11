@@ -52,6 +52,7 @@
 }
 .postcode_area:hover {
   fill: orangered ;
+  cursor: pointer;
 }
 
 

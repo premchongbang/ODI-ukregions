@@ -1,0 +1,26 @@
+Region,Old area code,New area code,Population mid-20121 (Thousands),"Total population
+growth 
+2011 to 20121
+(%)","Median age
+mid-20121
+(Years)","Population 
+aged 
+under 16
+mid-20121
+(%)","Population aged
+65 and over
+mid-20121
+(%)","Area 
+(Sq km)",Population density mid-20121 (People per sq km),"Order
+number",Male life expectancy,Female life expectancy,Average life expectancy,Crime per 1000 people
+North East,A,E12000001,2602.3,1191400,41.5,17.8,18,8573,304,8,77.5,81.5,79.5,53
+North West,B,E12000002,7084.3,3018300,40.2,18.8,17.2,14105,502,9,77.4,81.5,79.5,63
+Yorkshire and the Humber,D,E12000003,5316.7,2328800,39.8,18.9,17.2,15408,345,10,78.1,82.0,80.1,68
+East Midlands,E,E12000004,4567.7,1957500,41,18.5,17.8,15606,293,11,78.7,82.8,80.8,58
+West Midlands,F,E12000005,5642.6,2359000,39.7,19.5,17.4,12998,434,12,78.4,82.6,80.5,62
+East of England,G,E12000006,5907.3,2535000,41,19,18.2,19109,309,13,79.9,83.6,81.8,53
+London,H,E12000007,8308.4,3261100,34,20.1,11.3,1572,5285,14,79.3,83.6,81.5,95
+South East,J,E12000008,8724.7,3654800,40.8,19.1,17.9,19070,458,15,80.0,83.8,81.9,56
+South West,K,E12000009,5339.6,2318200,42.9,17.6,20.3,23837,224,16,79.8,83.7,81.7,54
+Wales,924,W92000004,3074.1,1337100,41.7,18.1,19.1,20735,148,5,77.5,81.7,79.6,57
+Scotland,923,S92000003,5313.6,2370000,41.5,17.2,17.4,77933,68,6,75.8,80.3,78.0,52
