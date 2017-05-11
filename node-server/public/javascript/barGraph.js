@@ -90,7 +90,7 @@ function drawGraph(id, region, dataName, filter){
 	      	.style("text-anchor", "end")
 	      	.attr("dx", "-.8em")
 	      	.attr("dy", "-.55em");
-        var h = height/2-margin.up;
+			
 		var w = -margin.left+20;
         svg.append("text")
             .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
