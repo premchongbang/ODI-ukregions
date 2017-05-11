@@ -8,6 +8,8 @@
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <!-- map -->
     <script src="javascript/map.js"></script>
@@ -26,43 +28,39 @@
     <div class="container" id="container">
 
       <div class="left-sub-container" id="left-container">
-        <div class="header" onclick="setTopic(this)" style="cursor:pointer;">
+        <div class="header" onclick="setTopicBack(this)" style="cursor:pointer;">
           <h1> UK </h1>
           <h1 style="font-family: 'Trocchi', serif; font-size: 2.5vw;"> REGIONS </h1> 
         </div>
 
         <div class="button-holder">
           <h2 style="font-size: 2.4vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
-          <ul style="padding: 0; margin: 0;">
+          <ul style="padding: 0; margin: 0;" id="btndb">
             <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Education"> Education </br> 
-            <i class="fa fa-book" aria-hidden="true"> </i> 
+            <i class="fa fa-book" aria-hidden="true"> </i>
             </li>
 
             <li onclick="setTopic(this);" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Economy"> Economy </br> 
             <i class="fa fa-line-chart" aria-hidden="true"></i> </i> 
             </li>
 
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Crime </br> 
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Crime"> Crime </br> 
             <i class="fa fa-ban" aria-hidden="true"></i> 
             </li>
 
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Transportation </br>
-            <i class="fa fa-truck" aria-hidden="true"></i> </i> 
-            </li>
-
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Social </br> 
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Social"> Social </br> 
             <i class="fa fa-male" aria-hidden="true"></i> <i class="fa fa-female" aria-hidden="true"></i> 
             </li>
 
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Population </br> 
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Population"> Population </br> 
             <i class="fa fa-users" aria-hidden="true"></i>
             </li>
 
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Employment </br> 
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Employment"> Employment </br> 
             <i class="fa fa-building-o" aria-hidden="true"></i> 
             </li>
 
-            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;"> Housing </br> 
+            <li onclick="setTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Housing"> Housing </br> 
             <i class="fa fa-home" aria-hidden="true"></i> </i> 
             </li>
           </ul>
@@ -82,44 +80,50 @@
         </div>
 
         <div class ="right-sub-container right" id="right-sub-container-right">
-          <label>Your preference:</label>
-          <br><br>
-          <label>Preference 1</label>
-          <select id="p1" >
-              <option selected="selected">Crime</option>
-              <option>Economy</option>
-              <option>Education</option>
-              <option>Employment</option>
-              <option>Housing</option>
-              <option>Population</option>
-              <option>Social</option>
-          </select>
-          <br>
-          <label>Preference 2</label>
-          <select id="p2" >
-              <option>Crime</option>
-              <option >Economy</option>
-              <option>Education</option>
-              <option>Employment</option>
-              <option>Housing</option>
-              <option>Population</option>
-              <option>Social</option>
-          </select>
-          <br>
-          <label>Preference 3</label>
-          <select id="p3">
-              <option>Crime</option>
-              <option>Economy</option>
-              <option >Education</option>
-              <option>Employment</option>
-              <option>Housing</option>
-              <option>Population</option>
-              <option>Social</option>
-          </select>
-          <br>
-          <input type="button" id="submits" value= "submit"></input>
-      <div id="drop2" align=center></div>
-        </div>
+          <div class = "preference-box">
+            <label>Your preference:</label>
+            <br><br>
+            <label>Preference 1</label>
+            <select id="p1"  style="border: 1px solid #0000ff;">
+                <option selected="selected">Crime</option>
+                <option>Economy</option>
+                <option>Education</option>
+                <option>Employment</option>
+                <option>Housing</option>
+                <option>Population</option>
+                <option>Social</option>
+            </select>
+            <br>
+            <label>Preference 2</label>
+            <select id="p2" style="border: 1px solid #0000ff;">
+                <option>Crime</option>
+                <option >Economy</option>
+                <option>Education</option>
+                <option>Employment</option>
+                <option>Housing</option>
+                <option>Population</option>
+                <option>Social</option>
+            </select>
+            <br>
+            <label>Preference 3</label>
+            <select id="p3" style="border: 1px solid #0000ff;">
+                <option>Crime</option>
+                <option>Economy</option>
+                <option >Education</option>
+                <option>Employment</option>
+                <option>Housing</option>
+                <option>Population</option>
+                <option>Social</option>
+            </select>
+            <br>
+            <input type="button" id="submits" style="margin-left: 10px;" value= "submit"></input>
+          </div>
+          
+          <div class="chart-container" id="graph" style="width: 80%; height:80%; margin:15% 15% 15% 15%;">
+          </div>
+
+          <div id="drop2" align=center></div>
+          </div>
       </div>
     </div>
 
@@ -127,7 +131,7 @@
     </div>
 
     <script type="text/javascript" language="javascript">
-      var topic = "Crime";
+      var topic = ""; // need to change it 
       var socket = io.connect();
       var data;
       
@@ -151,9 +155,22 @@
 
       function setTopic(elmnt){
         //getting onclicked topic
+        if(topic !== ""){
+          document.getElementById(topic).style.backgroundColor = "#33b5e5";
+        }
         topic = getTopic(elmnt);
         setWindowSize();
         drawMap("#right-sub-container-left", topic);
+        elmnt.style.backgroundColor = " #87CEFA";
+        console.log("topic " + topic);
+      }
+
+      function setTopicBack(){
+        document.getElementById(topic).style.backgroundColor = "#33b5e5";
+        topic = "";
+        setWindowSize();
+        drawMap("#right-sub-container-left", topic);
+        
         console.log("topic " + topic);
       }
       
@@ -165,6 +182,7 @@
       window.onresize = function(){
         console.log(data);
         setWindowSize();
+        drawChart();
         drawMap("#right-sub-container-left", topic);      
       }
     </script>

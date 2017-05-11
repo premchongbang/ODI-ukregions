@@ -4,6 +4,7 @@ function drawMap(id, topic){
   var dataname = '../data/map/topo_eer.json';
 
   d3.select("#map").remove();
+  d3.select("#chart").remove();
 
   var map = d3.select(id);
   var pc = document.getElementById("right-sub-container-left");
@@ -129,7 +130,11 @@ function drawMap(id, topic){
           return colorScale(ratings[d.properties.EER13NM]);
         })
         .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();})
-        .on('click', function(d){ openNav(navid, d.properties.EER13NM, topic);})                  
+        .on('click', function(d){ if(topic !== ""){
+                                    openNav(navid, d.properties.EER13NM, topic);
+                                  } else {
+                                    drawChart();
+                                  } })                  
         .append("svg:title")
               .attr("transform", function (d, i) { return "translate(" + path.centroid(d) + ")"; })
               .attr("dy", ".35em")
@@ -192,4 +197,96 @@ function setWindowSize() {
   document.getElementById("container").style.height = (myHeight * 0.97) + "px";
 
    //alert("height " + document.getElementById("container").style.height);
+}
+
+function setTopicBack(){
+  document.getElementById(topic).style.backgroundColor = "#33b5e5";
+  topic = "";
+  setWindowSize();
+  drawMap("#right-sub-container-left", topic);
+
+  console.log("topic " + topic);
+}
+
+function drawChart(){
+
+  d3.select("#chart").remove();
+      
+  var container = document.getElementById("graph");
+  console.log("look here "+ container);
+  var τ = 2 * Math.PI,
+      width = getInt(container.style.width),
+      height = getInt(container.style.height);
+
+  var outerRadius = Math.min(width,height)/2,
+    innerRadius = (outerRadius/5)*4,
+    fontSize = (Math.min(width,height)/4);
+  
+  myString = "1212px";
+    var splits = myString.split(/(\d+)/);
+    var prodName = splits[0];
+    var prodId = splits[1];
+
+  var arc = d3.svg.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius)
+      .startAngle(0);
+
+      console.log(" viewBox " + width);
+
+  var svg = d3.select("#graph").append("svg")
+      .attr("id","chart")
+      .attr("width", '100%')
+      .attr("height", '100%')
+      .attr('viewBox','0 0 '+ Math.min(width,height) +' '+ Math.min(width,height) )
+      .attr('preserveAspectRatio','xMinYMin')
+      .append("g")
+      .attr("transform", "translate(" + Math.min(width,height) / 2 + "," + Math.min(width,height) / 2 + ")");
+
+  var text = svg.append("text")
+      .text('0%')
+      .attr("text-anchor", "middle")
+      .style("font-size",fontSize+'px')
+      .attr("dy",fontSize/3)
+      .attr("dx",2);
+  
+  var background = svg.append("path")
+      .datum({endAngle: τ})
+      .style("fill", "#7cc35f")
+      .attr("d", arc);
+
+  var foreground = svg.append("path")
+      .datum({endAngle: 0 * τ})
+      .style("fill", "#57893e")
+      .attr("d", arc);
+
+  setInterval(function() {
+    foreground.transition()
+        .duration(750)
+        .call(arcTween, Math.random() * τ);
+  }, 1500);
+
+  function arcTween(transition, newAngle) {
+
+    transition.attrTween("d", function(d) {
+
+        var interpolate = d3.interpolate(d.endAngle, newAngle);
+        
+        return function(t) {
+            
+            d.endAngle = interpolate(t);
+            
+            text.text(Math.round((d.endAngle/τ)*100)+'%');
+            
+            return arc(d);
+        };
+    });
+  }
+}
+
+function getInt(myString){
+    var splits = myString.split(/(\d+)/);
+    var prodName = splits[0];
+    var prodId = splits[1];
+    return parseInt(prodId);
 }
