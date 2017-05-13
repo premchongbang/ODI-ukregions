@@ -61,12 +61,25 @@ function drawGraph(id, region, dataName, filter){
 	});
 	
 	console.log(formated);
+	    var min = d3.min(data, function(d){
+					return +d[selection]*1.1;
+				});
+		var max = d3.max(data, function(d){
+					return +d[selection]*1.1;
+				});
+		if (min > 0){
+				min = 0;
+			}
+		if (min === max){
+			if (min < 0){
+				max = 0;
+			}
+		}
+		console.log(min,max);
 		//console.log(categories);
 		var x = d3.scale.linear()
-				.domain([0, d3.max(data, function(d){
-					return +d[selection];
-				})])
-				.range([0,width]);
+				.domain([min, max])
+				.range([0,width]).nice();
 
 		var y = d3.scale.ordinal()
 				.domain(elements)
@@ -75,7 +88,8 @@ function drawGraph(id, region, dataName, filter){
 
 		var xAxis = d3.svg.axis()
 			.scale(x)
-		    .orient("top");
+		    .orient("top")
+			.ticks(5);
 
 		var yAxis = d3.svg.axis()
 			.scale(y)
@@ -130,8 +144,25 @@ function drawGraph(id, region, dataName, filter){
 	    	.on("change", function(d){
 	        	selection = document.getElementById("dropdown");
 				//console.log(selection);
-	        	x.domain([0, d3.max(data, function(d){
-					return +d[selection.value];})]);
+	        	var min = d3.min(data, function(d){
+					return +d[selection.value]*1.1;
+				});
+				var max = d3.max(data, function(d){
+							return +d[selection.value]*1.1;
+						});
+				if (min > 0){
+						min = 0;
+					}
+				if (min === max){
+					if (min < 0){
+						max = 0;
+					}
+				}
+				console.log(min,max);
+				//console.log(categories);
+				var x = d3.scale.linear()
+						.domain([min, max])
+						.range([0,width]).nice();
 
 
 	        	xAxis.scale(x);
