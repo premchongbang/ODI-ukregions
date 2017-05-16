@@ -1,12 +1,12 @@
-Regions,Sub_Region,Total population,Average Life Expectancy,Crime per 1000 people
-East Midlands,East Midlands,2602300,80.8,58
-Eastern,Eastern,7084300,81.8,53
-London,London,5316700,81.5,95
-North East,North East,4567700,79.5,53
-North West,North West,5642600,79.5,63
-Scotland,Scotland,5907300,78,52
-South East,South East,8308400,81.9,56
-South West,South West,8724700,81.7,54
-Wales,Wales,5339600,79.6,57
-West Midlands,West Midlands,3074100,80.5,62
-Yorkshire and The Humber,Yorkshire and The Humber,5313600,80.1,68
+Regions,Sub_Region,Total population,Average Life Expectancy,Crime per 1000 people,Population density
+East Midlands,East Midlands,2602300,80.8,58,293.00
+Eastern,Eastern,7084300,81.8,53,309.00
+London,London,5316700,81.5,95,5285.00
+North East,North East,4567700,79.5,53,304.00
+North West,North West,5642600,79.5,63,502.00
+Scotland,Scotland,5907300,78,52,68.00
+South East,South East,8308400,81.9,56,458.00
+South West,South West,8724700,81.7,54,224.00
+Wales,Wales,5339600,79.6,57,148.00
+West Midlands,West Midlands,3074100,80.5,62,434.00
+Yorkshire and The Humber,Yorkshire and The Humber,5313600,80.1,68,345.00

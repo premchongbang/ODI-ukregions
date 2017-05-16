@@ -19,8 +19,9 @@
 .stop-down{
 	stop-color:#003300;
 }
+
 .filled {
-                fill: url(#mainGradient);
+  fill: url(#mainGradient);
 }
 .d3-tip {
   line-height: 1;
@@ -52,6 +53,11 @@
 }
 .postcode_area:hover {
   fill: orangered ;
+  cursor: pointer;
+}
+
+.postcode_area:active {
+  fill: red ;
   cursor: pointer;
 }
 

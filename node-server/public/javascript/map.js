@@ -1,7 +1,9 @@
 // pc = svg parent container
-function drawMap(id, topic){
+function drawMap(id){
 
   var dataname = '../data/map/topo_eer.json';
+
+  console.log("topic " + topic);
 
   d3.select("#map").remove();
   d3.select("#chart").remove();
@@ -14,8 +16,6 @@ function drawMap(id, topic){
       height = pc.clientHeight;
 
   var aspect = (width / height) * 2;
-
-  console.log("width " + width + "height " + height + " new height " + height);
 
   if((aspect * 2) <= 2) {
     var projection = d3.geo.albers()
@@ -43,14 +43,13 @@ function drawMap(id, topic){
 
   
   //var colorScale = d3.scale.linear().domain([0,2.5,7.5,10]).range(["#990000","#ff6666","#99ff99","#003300"]);
-  var colorScale = d3.scale.linear().domain([0,1,10]).range(["#999999","#003300","#99ff99"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
 
   var aspect = width / height;
 
   var areas=["AB", "AL", "B", "BA", "BB", "BD", "BH", "BL", "BN", "BR", "BS", "BT", "CA", "CB", "CF", "CH", "CM", "CO", "CR", "CT", "CV", "CW", "DA", "DD", "DE", "DG", "DH", "DL", "DN", "DT", "DY", "E", "EC", "EH", "EN", "EX", "FK", "FY", "G", "GL", "GU", "HA", "HD", "HG", "HP", "HR", "HS", "HU", "HX", "IG", "IP", "IV", "KA", "KT", "KW", "KY", "L", "LA", "LD", "LE", "LL", "LN", "LS", "LU", "M", "ME", "MK", "ML", "N", "NE", "NG", "NN", "NP", "NR", "NW", "OL", "OX", "PA", "PE", "PH", "PL", "PO", "PR", "RG", "RH", "RM", "S", "SA", "SE", "SG", "SK", "SL", "SM", "SN", "SO", "SP", "SR", "SS", "ST", "SW", "SY", "TA", "TD", "TF", "TN", "TQ", "TR", "TS", "TW", "UB", "W", "WA", "WC", "WD", "WF", "WN", "WR", "WS", "WV", "YO", "ZE"];
   
-  var ratings= {"Scotland": 1, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
-    
+  //var ratings= {"Scotland": 1, "North East":7, "North West":2, "Yorkshire and The Humber":9, "Wales":3, "West Midlands": 4, "East Midlands":5, "London":8, "Eastern":9, "South West":1, "South East":10};
+
   var areadata={};
 
   _.each(areas, function(a) {
@@ -98,6 +97,12 @@ function drawMap(id, topic){
     .html(function(d) {
       return d.properties.EER13NM;
     });
+
+    var min = d3.min(d3.values(ratings));
+    var max = d3.max(d3.values(ratings));
+
+    var colorScale = d3.scale.linear().domain([0,min,max]).range(["#999999","#003300","#99ff99"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
+
     svg.call(tip);
     svg.append('text')
       .attr('class','tiptext')
@@ -149,21 +154,17 @@ function drawMap(id, topic){
 
 function openNav(element, region, dataName) {
 
-    console.log("topic1 " + dataName);
     var topic = dataName.concat("_Meta.csv");
 
-    console.log("topic2 " + topic);
-
     document.getElementById("myNav").style.height = "100%";
-    
     window.drawGraph('#overlayDisplay', region, topic, true);
-    console.log("end");
 }
 
 function closeNav() {
     document.getElementById("myNav").style.height = "0%";
 }
 
+// fetch the current topic
 function getTopic(elmnt){
   var topic = "";
   var str = elmnt.innerHTML;
@@ -172,11 +173,12 @@ function getTopic(elmnt){
         topic = strArray[1];
 
         if(topic == ""){
-          topic = "overall";
+          topic = "";
         }
         return topic;
 }
 
+// setting window size for responsive layout
 function setWindowSize() {
   var myWidth = 0, myHeight = 0;
   if( typeof( window.innerWidth ) == 'number' ) {
@@ -199,6 +201,7 @@ function setWindowSize() {
    //alert("height " + document.getElementById("container").style.height);
 }
 
+//setting topics
 function setTopicBack(){
   document.getElementById(topic).style.backgroundColor = "#33b5e5";
   topic = "";
@@ -226,6 +229,7 @@ function drawChart(){
     var splits = myString.split(/(\d+)/);
     var prodName = splits[0];
     var prodId = splits[1];
+
 
   var arc = d3.svg.arc()
       .innerRadius(innerRadius)
@@ -290,3 +294,178 @@ function getInt(myString){
     var prodId = splits[1];
     return parseInt(prodId);
 }
+
+
+// index code 
+
+      var topic = ""; // need to change it 
+      
+      var data = {regional: {}}; // stores regional ratings 
+      var ratings = {}; // stores rating values
+      var allRadios = document.getElementsByName('selector');
+
+      $(document).ready(function(){
+        $("button").click(function() {
+          var p1 = $("#p1").val(),
+              p2 = $("#p2").val(),
+              p3 = $("#p3").val();
+
+          if((p1==p2)||(p1==p3)||(p2==p3)) {
+            document.getElementById("clientmsg").innerHTML = "Please select unique categories.";
+          } else {
+            //var customList = {ID : 3, one : $("#p1").val(), two : $("#p1").val(), three : $("#p1").val()};
+            $.ajax({
+              type : 'POST',
+              url : '/getPreferenceRating',
+              headers : {'Content-Type' : 'application/json'},
+              data : JSON.stringify({ID : this.id, one : p1, two : p2, three : p3}),
+              success : function(result) {
+                console.log("ajax return " + result.London);
+                ratings = result;
+                drawMap("#right-sub-container-left");
+              }
+            });
+          }
+        });
+      });
+
+      // in here, we set the preferences which remain static
+      function getCustomRating(elemt){
+
+        if(elemt.value === "one"){
+          var topics = ["Education", "Crime", "Social"];
+          getData(topics);
+        } else if(elemt.value === "two"){
+          var topics = ["Employment", "Crime", "Housing"];
+          getData(topics);
+        } else if(elemt.value === "three"){
+          var topics = ["Employment", "Crime", "Housing"];
+          getData(topics);
+        } else if(elemt.value === "four"){
+          var topics = ["Economy", "Education", "Social"];
+          getData(topics);
+        }
+      }
+
+      function getData(customList){
+        var storeNum = ["count", "one", "two", "three", "four", "five"];
+        var list = {};
+
+        // index zero store size of customList
+        for(i=0; i <= customList.length;i++){
+          if(i === 0){
+            var index = storeNum[i];
+            list.index = customList.length;          
+          } else {
+            var index = storeNum[i];
+            list.index = customList[i];
+          }
+        }
+
+        // need to add ajax code here
+        $(document).ready(function(){
+          $.ajax({
+            type : 'POST',
+            url : '/getPreferenceRating',
+            headers : {'Content-Type' : 'application/json'},
+            data : JSON.stringify({ID : "custom", one : customList[0], two : customList[1], three : customList[2]}),
+            success : function(result) {
+              console.log("ajax return " + result.London);
+              ratings = result;
+              drawMap("#right-sub-container-left");
+            }
+          });
+        });
+      }
+
+      function changeTopic(elmnt){
+
+        //getting onclicked topic
+        if(topic !== ""){
+          document.getElementById(topic).style.backgroundColor = "#33b5e5";
+        }
+
+        topic = getTopic(elmnt);
+        setWindowSize();
+        for(key in data.regional){
+          if(topic === key){
+            console.log("topic " + topic + "  key " + key);
+            ratings = data.regional[key];
+          }
+        }
+        drawMap("#right-sub-container-left");
+        elmnt.style.backgroundColor = " #87CEFA";
+      }
+
+      // setting topic to initial state
+      function setTopicBack(){
+        if(topic !== ""){
+          document.getElementById(topic).style.backgroundColor = "#33b5e5"; 
+        }
+
+        topic = "";
+        ratings = data.regional.Overall;
+        setWindowSize();
+        drawMap("#right-sub-container-left");
+      }
+      
+      window.onload = function (){
+        setWindowSize();
+        drawMap("#right-sub-container-left");
+        change(document.getElementById("slideThree"));
+      }
+
+      window.onresize = function(){
+        console.log(data);
+        setWindowSize();
+        drawChart();
+        drawMap("#right-sub-container-left");    
+      }
+
+      // change mode
+      function changeMode(elemt){
+        window.change(elemt);
+      }
+
+      // hiding html contents
+      function change(elemt){
+        if(elemt.value === "true"){
+
+          for(x = 0; x < allRadios.length; x++){
+
+            allRadios[x].checked = false;
+          }
+
+          elemt.value = false;
+          setTopicBack();
+          ratings = {};
+          
+          drawMap("#right-sub-container-left"); 
+          document.getElementById("clientmsg").innerHTML = "";
+          d3.select("#chart").remove();
+          
+          document.getElementById("mh1").style.display = "unset";
+          document.getElementById("bh1").style.display = "unset";
+
+          document.getElementById("mh2").style.display = "none";
+          document.getElementById("bh2").style.display = "none";
+          document.getElementById("pref").style.display = "none";
+        } else {
+          elemt.value = true;
+          
+          ratings = data.regional.Overall;
+
+          setTopicBack();
+          
+          drawMap("#right-sub-container-left"); 
+
+          d3.select("#chart").remove();
+          
+          document.getElementById("mh1").style.display = "none";
+          document.getElementById("bh1").style.display = "none";
+
+          document.getElementById("mh2").style.display = "unset";
+          document.getElementById("bh2").style.display = "unset";
+          document.getElementById("pref").style.display = "unset";
+        }
+      }

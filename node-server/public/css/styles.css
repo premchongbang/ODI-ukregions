@@ -4,12 +4,38 @@
 
 h1 {
     color: #111; 
-    font-family: 'Helvetica Neue', 
-    sans-serif; font-size: 4vw; 
+    font-family: 'Helvetica Neue', sans-serif; 
+    font-size: 4vw; 
     font-weight: bold; 
     letter-spacing: -1px; 
     line-height: 1; 
     text-align: center; 
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+h2 {
+    color: #111; 
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 3.5vw;
+    font-weight: bold; 
+    letter-spacing: -1px; 
+    line-height: 1; 
+    text-align: center; 
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+h3 {
+    color: #111; 
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 1.5vw;
+    font-weight: bold; 
+    letter-spacing: -1px; 
+    line-height: 1; 
+    text-align: left; 
     border: 0;
     padding: 0;
     margin: 0;
@@ -76,12 +102,11 @@ option{
 }
 
 .right-sub-container {
-    border-radius: 3%;
+    border-radius: 2%;
 	width: 80%;
     height: 100%;
     float: left;
     padding: 0;
-    background-color: #4682B4;
 }
 
 .left {
@@ -89,6 +114,7 @@ option{
     padding: 0;
     margin: 0;
     float: left;
+    background-color:   #FFFFFF;
 }
 
 .right {
@@ -96,17 +122,19 @@ option{
     padding: 50px;
     margin: 0;
     float: left;
+    background-color: #B0C4DE;
 }
 
 .preference-box {
     min-width: 135px;
+    min-height: 160px;
     width: 80%;
     box-shadow: 10px 10px 5px grey;
     padding:15px;
     position: relative;;
     background-color: #C0C0C0;
     border-radius: 10px;
-    margin-left: 10px;
+    margin: 20px 20px 30px 10px;
 }
 
 .footer {

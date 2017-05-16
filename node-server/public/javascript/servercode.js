@@ -1,157 +1,123 @@
- var exports = module.exports = {};
- var d3 = require("d3");
+var csv = require("fast-csv");// crime_rating= [{},{}] {region: "East" , rating:2.5 } 2dp
+var fs = require("fs");
+var exports= module.exports={};
 
-            // array of all the regions
-            var regions=["North East","North West","Yorkshire and the Humber","East Midlands","West Midlands","East of England","London","South East","South West","Wales","Scotland"];
 
-            var category=["Crime","Economy","Education","Employment","Housing","Population","Social"];
-                //create a two dimension array to store the id of the table
-                var idname=[["NEcrime","NEeconomy","NEeducation","NEemployment","NEhouse","NEpopulation","NEsocial"],
-["NWcrime","NWeconomy","NWeducation","NWemployment","NWhouse","NWpopulation","NWsocial"],
- ["YATHcrime","YATHeconomy","YATHeducation","YATHemployment","YATHhouse","YATHpopulation","YATHsocial"],
-  ["EMcrime","EMeconomy","EMeducation","EMemployment","EMhouse","EMpopulation","EMsocial"],
- ["WMcrime","WMeconomy","WMeducation","WMemployment","WMhouse","WMpopulation","WMsocial"],
-   ["EEcrime","EEeconomy","EEeducation","EEemployment","EEhouse","EEpopulation","EEsocial"],
-    ["LDcrime","LDeconomy","LDeducation","LDemployment","LDhouse","LDpopulation","LDsocial"],
- ["SEcrime","SEeconomy","SEeducation","SEemployment","SEhouse","SEpopulation","SEsocial"],
-      ["SWcrime","SWeconomy","SWeducation","SWemployment","SWhouse","SWpopulation","SWsocial"],
- ["WAcrime","WAeconomy","WAeducation","WAemployment","WAhouse","WApopulation","WAsocial"],
-     ["SLcrime","SLeconomy","SLeducation","SLemployment","SLhouse","SLpopulation","SLsocial"] ];
-           var new_ratingid=[["new_ratingname1","new_ratingvalue1"],["new_ratingname2","new_ratingvalue2"],["new_ratingname3","new_ratingvalue3"],["new_ratingname4","new_ratingvalue4"],["new_ratingname5","new_ratingvalue5"],["new_ratingname6","new_ratingvalue6"],["new_ratingname7","new_ratingvalue7"],["new_ratingname8","new_ratingvalue8"],["new_ratingname9","new_ratingvalue9"],["new_ratingname10","new_ratingvalue10"],["new_ratingname11","new_ratingvalue11"]]
-            
-            //array with population data of different regions
-            var populationList=[];
-            
-            // arrays which will store data regarding different categories
-            var crime_array=[];
-            var economy_array=[];
-            var education_array=[];
-            var employment_array=[];
-            var housing_array=[];
-            var population_array=[];
-            var social_array=[];
-            
-            // arrays which will soter data regarding different regions's rating for all categories
-            var crime_rating=[];// e.g. North East 5
-            var economy_rating=[];
-            var education_rating=[];
-            var employment_rating=[];
-            var housing_rating=[];
-            var population_rating=[];
-            var social_rating=[];
-            var new_rating=[];
+ // array of all the regions
 
-            var crime_unsortrating=[];
-            var economy_unsortrating=[];
-            var education_unsortrating=[];
-            var employment_unsortrating=[];
-            var housing_unsortrating=[];
-            var population_unsortrating=[];
-            var social_unsortrating=[];
-            
+var regions=["North East","North West","Yorkshire and The Humber","East Midlands","West Midlands","Eastern","London","South East","South West","Wales","Scotland"];
+var category=["Crime","Economy","Education","Employment","Housing","Population","Social"];
 
-module.exports = {
-    // finding the distane between two latitude and longitude point using Haversine formula
-  getRegionalRating: function() {
-      d3.csv("./data/cat2/Population_Meta.csv", function(d) {// getting population data from population csv
-                return {
-                    region : d["Region"],
-                    population : Number(d["Population mid-20121 (Thousands)"])
-                };
-            }, function(data) {
-                    // pushing region and population data into populationList json
-                    for(var i=0; i<regions.length;i++){
-                        data.forEach(function(d){
-                            if(d.region==regions[i]){
+module.exports={
+sortResults: function(myArray,prop, asc){
+    return myArray = myArray.sort(function(a, b) {
+            if (asc) {
+                return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+            } else {
+                return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+            }
+    });
+  },
+  
+getCrimeRating: function(cb){
+    var path = fs.createReadStream("./public/data/cat/Population_Meta.csv");
+    var dataStore1=[];
+    var populationList=[];
+    // getting populatin info
+    var csvStream = csv.fromStream(path, {headers : true})
+                  .on("data", function(d) {
+                  dataStore1.push({region: d["Regions"], population: Number(d["Total population"])});
+
+                  }).on("end", function(){
+                      //console.log(dataStore);
+                  // pushing region and population data into populationList json
+                      for(var i=0; i<regions.length;i++){
+                          dataStore1.forEach(function(d){
+                             if(d.region==regions[i]){
                             populationList.push(
-                        {
-                            region: regions[i],
-                            value: d.population
+                            {
+                                region: regions[i],
+                                population: d.population
+                            });
+                             } 
+                          });
+                      
+
+                         //console.log("Index " +i+" Region: "+populationList[i].region+" population: "+populationList[i].population);
+                           }
+                                                      
+                  });
+    var dataStore2=[];
+    var crime_array=[];
+    var crime_rating=[];
+// getting data and working out rating for crime    
+    path= fs.createReadStream("./public/data/cat/Crime_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+        dataStore2.push( {region: d["Sub_Region"], totalCrime: Number(d["Total recorded crime (excluding fraud)"])} );
+        
+                    }).on("end", function(){
+                        var crime
+                        for(var i=0;i<regions.length;i++){
+                            var totalRegionalCrime= 0;
+                            
+                            dataStore2.forEach(function(d){
+                                if(regions[i]==d.region && typeof(d.totalCrime)!='undefined'){
+                                    totalRegionalCrime= d.totalCrime;
+                                    //console.log("Region: "+d.region+" total regional crime "+d.totalCrime);
+                                }
+                            });
+                            
+                            populationList.forEach(function(element){
+                                if(element.region==regions[i]){
+                                    population= element.population;
+                                    crimedensity=totalRegionalCrime/population; // calculating crime density
+                                    //console.log("region: "+element.region+" crimeDensity "+crimedensity);
+                                }
+                            });
+                            
+                            crime_array.push(// pushing all data into crime_array json
+                                {
+                                    region: regions[i],
+                                    totalCrime: totalRegionalCrime,
+                                    crimeDensity: crimedensity
+                                }
+                            );
                         }
-                                
-                    );
-                            }
-                        })
+                        //console.log(crime_array);
                         
-                  
-                    //console.log("Region: "+populationList[i].region+" population: "+populationList[i].value);
-                }
-                
-            });
-            
-            d3.csv("./data/cat2/Crime_Meta.csv", function(d) {// getting data regarding crime from crime_meta csv
-                return {
-                    region : d["Regions"],
-                    totalCrime : Number(d["Total recorded crime (excluding fraud3)"])
-                };
-            }, function(data) {
-                    var population=0;
-                    var crimedensity=0;
-                
-                // adding up total crime in a area then using that, regional population data to calcuate crime density (total crime/ population) of each region.
-                for(var i=0; i<regions.length;i++){
-                    var totalRegionalCrime= 0;
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
-                            totalRegionalCrime += d.totalCrime;
+                        //working out difference between each region's data
+                        module.exports.sortResults(crime_array, "crimeDensity",true);// sorrting json by crime density in ascending order
+                        var minCrimeDensity=0;
+                        if(crime_array[0].crimeDensity==0){// for when we don't have crime data regarding a region
+                            minCrimeDensity= crime_array[1].crimeDensity;
                         }
-                    });
-                     
-                    populationList.forEach(function(element){
-                        if(element.region==regions[i]){
-                        population= element.value;
-                        crimedensity=totalRegionalCrime/population; // calculating crime density
+                        else{// else
+                            minCrimeDensity= crime_array[0].crimeDensity;
                         }
-                    });
-                    //console.log("Region "+regions[i]+" population "+population+" crime density: "+crimedensity);
-                  crime_array.push(// pushing all data into crime_array json
-                        {
-                            region: regions[i],
-                            totalCrime: totalRegionalCrime,
-                            crimeDensity: crimedensity
-                        }
-                    );
-                    
-                    }
-                //console.log(crime_array);
-                
-               
-                module.exports.sortResults(crime_array,"crimeDensity",true);// sorting crime_array json by crime density in ascending order
-                
-                //getting min crime density
-                var minCrimeDensity=0;
-                if(crime_array[0].crimeDensity==0){
-                    minCrimeDensity= crime_array[1].crimeDensity;
-                }
-                else{
-                    minCrimeDensity= crime_array[0].crimeDensity;
-                }
-                
-                
-                //console.log("min crime density "+minCrimeDensity);
-                
-                // working out percentage
-                var percentage=0;
-                var temparray=[];
-                crime_array.forEach(function(element){
-                       percentage= minCrimeDensity/element.crimeDensity;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           totalCrime: element.totalCrime,
-                           crimeDensity: element.crimeDensity,
-                           percentage: percentage
-                       });
+                        //console.log("minCrimeDensity "+minCrimeDensity);
+                        //console.log("minCrimeDensity "+crime_array[0].crimeDensity);
+                        
+                        // working out percentage
+                        var percentage=0;
+                        var temparray=[];
+                        crime_array.forEach(function(element){
+                            percentage= minCrimeDensity/element.crimeDensity;
+                            //console.log("Region "+element.region+" percentage "+percentage);
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                totalCrime: element.totalCrime,
+                                crimeDensity: element.crimeDensity,
+                                percentage: percentage
+                            });
                    
-                });
+                        });
                 
-                crime_array=[];
-                crime_array=temparray;// transfering all info into crime_array json
+                        crime_array=[];
+                        crime_array=temparray;// transfering all info into crime_array json
                 
-                //console.log(crime_array);
-                
-                // for loop used to work out rating for each region regarding crime and the data is stored in crime_rating json
+                        //console.log(crime_array);
+                        
+                        // for loop used to work out rating for each region regarding crime and the data is stored in crime_rating json
                 for(var i=0; i<crime_array.length;i++){
                     
                     if(crime_array[i].totalCrime===0){
@@ -171,411 +137,319 @@ module.exports = {
                         )
                     }
                 }
-              for(var i=0;i<crime_rating.length;i++){
-                    console.log("Region: "+crime_rating[i].region+" crime rating: "+crime_rating[i].rating);
+                module.exports.sortResults(crime_rating,"region",true);
+                for(var i=0;i<crime_rating.length;i++){
+                    //console.log("Region: "+crime_rating[i].region+" crime rating: "+crime_rating[i].rating);
                 }
-                //console.log(crime_rating);
-              //   for(var i=0;i<11;i++){
-              //       for(var j=0;j<regions.length;j++){
-              //       if(crime_rating[i].region==regions[j])
-              //       {
+                return cb(crime_rating);
+                
+                    });// end of end function
+  },
+  
+getEconomyRating: function(cb){
+    var dataStore=[];
+    var economy_array=[];
+    var economy_rating=[];
+    // getting data and working out rating for economy  
+    path= fs.createReadStream("./public/data/cat/Economy_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region: d["Sub_Region"], 
+                            totalGVA: Number(d["Gross Value Added at current basic price"]), 
+                            disposableIncome: Number(d["Gross disposable household income (per head)"]),
+                            disposableIncomeIncrease: Number(d["Growth in gross disposable household income (%)"])} );
+        
+                    }).on("end", function(){
+                        for(var i=0; i<regions.length;i++){
+                            var totalgva= 0;
+                            var averageDisposableIncome=0;
+                            var averageDisposableIncomeIncrease=0;
                     
-              // var tempid=idname[j][0];
-            
-              // $("#"+tempid).text(crime_rating[i].rating); 
-
-              //       }
-              //       }
-          
-              //   }
-
-
-        for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(crime_rating[j].region==regions[i]) {
-                  crime_unsortrating.push(
-                        {region:regions[i],
-                        rating:crime_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-        //   for(var i=0;i<crime_unsortrating.length;i++){
-        //       console.log("Region: "+crime_unsortrating[i].region+" crime rating: "+crime_unsortrating[i].rating);
-        // }
-                
-            });
-            
-            d3.csv("./data/cat2/Economy_Meta.csv", function(d) {// getting data regarding economy from economy_meta csv
-                return {
-                    region : d["Region"],
-                    totalGVA : Number(d["Gross Value Added at current basic price"]),
-                    disposableIncome: Number(d["Gross disposable household income (per head)"]),
-                    disposableIncomeIncrease: Number(d["Growth in gross disposable household income"])
-                };
-            }, function(data) {
-                for(var i=0; i<regions.length;i++){
-                    var totalgva= 0;
-                    var totalDisposableIncome=0;
-                    var totalDisposableIncomeIncrease=0;
-                    var averageDisposableIncome=0;
-                    var averageDisposableIncomeIncrease=0;
-                    var counter=0;
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
-                            totalgva += d.totalGVA;
-                            totalDisposableIncome += d.disposableIncome;
-                            totalDisposableIncomeIncrease+= d.disposableIncomeIncrease;
-                            counter++;
-                        }
-                    });
-                    
-                    averageDisposableIncome= totalDisposableIncome/counter;
-                    averageDisposableIncomeIncrease= totalDisposableIncomeIncrease/counter;
-                    
-                  economy_array.push(
-                        {
-                            region: regions[i],
-                            gva: totalgva,
-                            disposableIncome: averageDisposableIncome,
-                            disposableIncomeIncrease: averageDisposableIncomeIncrease
-                        }
-                    );
-                    //console.log("Crime: Region: "+crime_array.map(function(d){return d.region})+" total: //"+crime_array.map(function(d){return d.value}));
-                    
-                   // console.log(economy_array[i].region +" "+economy_array[i].value );
-                }
-                
-                module.exports.sortResults(economy_array,"gva",false); // sorting gva in dscending order
-                //console.log(economy_array);
-                
-                var maxGVA=economy_array[0].gva;
-                //console.log("max gva "+maxGVA);
-                
-                var percentage=0;
-                var temparray=[];
-                economy_array.forEach(function(element){
-                       percentage= element.gva/maxGVA;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           gva: element.gva,
-                           disposableIncome: element.disposableIncome,
-                           disposableIncomeIncrease: element.disposableIncomeIncrease,
-                           gvaPercentage: percentage,
-                           gvaTempRating: percentage*5
-                           
-                       });
-                   
-                });
-                
-                economy_array=[];
-                economy_array=temparray;// transfering all info into crime_array json
-                temparray=[];
-                
-                module.exports.sortResults(economy_array,"disposableIncome",false);// sorting disposable income in descending order
-                var maxDI= economy_array[0].disposableIncome;// getting max disposable income
-                
-                economy_array.forEach(function(element){
-                       percentage= element.disposableIncome/maxDI;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           gva: element.gva,
-                           disposableIncome: element.disposableIncome,
-                           disposableIncomeIncrease: element.disposableIncomeIncrease,
-                           gvaPercentage: element.gvaPercentage,
-                           gvaTempRating: element.gvaTempRating,
-                           giPercentage: percentage,
-                           giTempRating: percentage*5
-                           
-                       });
-                   
-                });
-                
-                economy_array=[];
-                economy_array=temparray;// transfering all info into economy_array json
-                temparray=[];
-                
-                module.exports.sortResults(economy_array,"disposableIncomeIncrease",false);// sorting disposable income in descending order
-                var maxDII= economy_array[0].disposableIncomeIncrease;// getting max disposable income
-                //console.log("Max DII "+maxDII);
-                
-                economy_array.forEach(function(element){
-                       percentage= element.disposableIncomeIncrease/maxDII;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           gva: element.gva,
-                           disposableIncome: element.disposableIncome,
-                           disposableIncomeIncrease: element.disposableIncomeIncrease,
-                           gvaPercentage: element.gvaPercentage,
-                           gvaTempRating: element.gvaTempRating,
-                           giPercentage: element.giPercentage,
-                           giTempRating: element.giTempRating,
-                           giiPercentage: percentage,
-                           giiTempRating: percentage*5
-                       });
-                    
-                   // console.log("Region "+element.region+" Gva Rating "+element.gvaTempRating+" GI Rating "+element.giTempRating+" GII Rating "+Math.round(percentage*5));
-                });
-                
-                economy_array=[];
-                economy_array=temparray;// transfering all info into economy_array json
-                temparray=[];
-                
-                
-                // for loop used to work out rating for each region regarding economy and the data is stored in economy_rating json
-                for(var i=0; i<economy_array.length;i++){
-                    
-                    if(economy_array[i].giiTempRating<0){
-                        economy_rating.push(
-                            {
-                                region: economy_array[i].region,
-                                rating: 1
-                            }
-                        )
-                    }
-                    else{
-                        var averageRating= (economy_array[i].gvaTempRating+economy_array[i].giTempRating+economy_array[i].giiTempRating)/3;
-                        economy_rating.push(
-                            {
-                                region: economy_array[i].region,
-                                rating: averageRating.toFixed(2)
-                            }
-                        )
-                    }
-                }
-                for(var i=0;i<economy_rating.length;i++){
-                    console.log("Region: "+economy_rating[i].region+" economy rating: "+economy_rating[i].rating);
-                }
-               //console.log(economy_rating);
-             // for(var i=0;i<11;i++){
-             //        for(var j=0;j<regions.length;j++){
-             //        if(economy_rating[i].region==regions[j])
-             //        {
-                    
-             //  var tempid=idname[j][1];
-             //  $("#"+tempid).text(economy_rating[i].rating); 
-
-             //        }
-             //        }
-          
-             //    }
-
-        for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(economy_rating[j].region==regions[i]) {
-                  economy_unsortrating.push(
-                        {region:regions[i],
-                        rating:economy_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-                
-        //    for(var i=0;i<economy_unsortrating.length;i++){
-        //       console.log("Region: "+economy_unsortrating[i].region+" crime rating: "+economy_unsortrating[i].rating);
-        // }       
-            });
-            
-             d3.csv("./data/cat2/Education_Meta.csv", function(d) {
-                return {
-                    region : d["Region"],
-                    girlGCSC : Number(d["Girls 5+ A*-C grades including maths and english"]),
-                    boyGCSC : Number(d["Boys 5+ A*-C grades  including maths and english"]),
-                    belowStandard : Number(d["Percentage of schools below the floor standard"])
-                };
-            }, function(data) {
-                    
-                for(var i=0; i<regions.length;i++){
-                    var count=0;
-                    var girlGCSCTotal=0;
-                    var boyGCSCTotal=0;
-                    var belowStandardTotal=0;
-                    
-                    var girlGCSCAverage=0;
-                    var boyGCSCAverage=0;
-                    var belowStandardAverage=0;
-                    var overallAverage=0;
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
-                            girlGCSCTotal += d.girlGCSC;
-                            boyGCSCTotal += d.boyGCSC;
-                            belowStandardTotal += d.belowStandard;
-                            count++;
-                        }
-                    });
-                    
-                    girlGCSCAverage= girlGCSCTotal/count;
-                    boyGCSCAverage= boyGCSCTotal/count;
-                    belowStandardAverage= belowStandardTotal/count;
-                    
-                    
-                    overallAverage= (girlGCSCAverage+boyGCSCAverage)/2;
-                    
-                  education_array.push(
-                        {
-                            region: regions[i],
-                            averageGrades: overallAverage,
-                            belowStandard: belowStandardAverage
-                        }
-                    );
-                    //console.log("Education: Region: "+education_array[i].region+" average grades: "+education_array[i].averageGrades+" below standard schools "+education_array[i].belowStandard);
-                }
-                
-                module.exports.sortResults(education_array,"averageGrades",false);
-                
-                var maxGrade=education_array[0].averageGrades;
-                //console.log("max gva "+maxGrade);
-                
-                
-                var percentage=0;
-                var temparray=[];
-                education_array.forEach(function(element){
-                       percentage= element.averageGrades/maxGrade;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                    
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           averageGrades: element.averageGrades,
-                           belowStandard: element.belowStandard,
-                           gradePercentage: percentage,
-                           gradeTempRating: percentage*5
-                       });
-                   
-                });
-                
-                education_array=[];
-                education_array=temparray;// transfering all info into crime_array json
-                temparray=[];
-                 
-                module.exports.sortResults(education_array,"belowStandard",true); // sorting education_array in ascending order
-                
-                var minBelowStandard=education_array[0].belowStandard;
-                //console.log("min below standard "+minBelowStandard);
-                
-                
-                var percentage=0;
-                var temparray=[];
-                education_array.forEach(function(element){
-                       percentage= minBelowStandard/element.belowStandard;
-                       //console.log("Region "+element.region+" percentage "+percentage);
-                    
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           averageGrades: element.averageGrades,
-                           belowStandard: element.belowStandard,
-                           gradePercentage: element.gradePercentage,
-                           gradeTempRating: element.gradeTempRating,
-                           belowStandardPercentage: percentage,
-                           belowStandardTempRating: percentage*5
-                       });
-                });
-                
-                education_array=[];
-                education_array=temparray;// transfering all info into crime_array json
-                temparray=[];
-                
-                 
-                  // for loop used to work out rating for each region regarding education and the data is stored in education_rating json
-                for(var i=0; i<education_array.length;i++){
-                    
-                    if(isNaN(parseFloat(education_array[i].gradeTempRating))|| isNaN(parseFloat(education_array[i].belowStandardTempRating))){
-                       // console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
-                        education_rating.push(
-                            {
-                                region: education_array[i].region,
-                                rating: 0
-                            }
-                        )
-                    }
-                    else{
-                        var averageRating= (education_array[i].gradeTempRating+education_array[i].belowStandardTempRating)/2;
-                        //console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
-                       // console.log("region "+education
-                        education_rating.push(
-                            {
-                                region: education_array[i].region,
-                                rating: averageRating.toFixed(2)
-                            }
-                        )
-                    }
-                }
-              for(var i=0;i<education_rating.length;i++){
-                    console.log("Region: "+education_rating[i].region+" education rating: "+education_rating[i].rating);
-                }
-               //console.log(education_rating);
-             // for(var i=0;i<11;i++){
-             //        for(var j=0;j<regions.length;j++){
-             //        if(education_rating[i].region==regions[j])
-             //        {
-                    
-             //  var tempid=idname[j][2];
-             //  $("#"+tempid).text(education_rating[i].rating); 
-
-             //        }
-             //        }
-          
-             //    }
-
-
-         for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(education_rating[j].region==regions[i]) {
-                  education_unsortrating.push(
-                        {region:regions[i],
-                        rating:education_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-        //             for(var i=0;i<education_unsortrating.length;i++){
-        //       console.log("Region: "+education_unsortrating[i].region+" crime rating: "+education_unsortrating[i].rating);
-        // }      
-            });
-            
-            d3.csv("./data/cat2/Employment.csv", function(d) {
-                return {
-                    region : d["region"],
-                    employmentRate : Number(d["employment rate"]),
-                    unemploymentRate : Number(d["unemployment rate"]),
-                    weeklyEarning : Number(d["Median gross weekly earnings"])
-                };
-            }, function(data) {
-
-                for(var i=0; i<regions.length;i++){
-
-                    data.forEach(function(d){
-                      console.log("e rate " +  d.employmentRate + " regions " + d.region );
-                        if(d.region==regions[i]){
-                            //console.log("Employment: Region: "+d.region+" employment rate: "+d.employmentRate+" unemployment rate "+d.unemploymentRate+" weekly earning "+d.weeklyEarning);
-                            employment_array.push(
+                            dataStore.forEach(function(d){
+                                if(d.region==regions[i] && typeof(d.totalGVA)!='undefined'){
+                                    totalgva = d.totalGVA;
+                                }
+                                if(d.region==regions[i] && typeof(d.disposableIncome)!='undefined'){
+                                    averageDisposableIncome = d.disposableIncome;
+                                    
+                                    }
+                                if(d.region==regions[i] &&  typeof(d.disposableIncomeIncrease)!='undefined'){
+                                    averageDisposableIncomeIncrease = d.disposableIncomeIncrease;
+                                }
+                            });
+                            //console.log("Region: "+regions[i]+" total gva "+totalgva+" total disposable income: "+averageDisposableIncome+" total disposable income increase: "+averageDisposableIncomeIncrease);
+                            
+                            economy_array.push(
                                 {
                                     region: regions[i],
-                                    employmentRate: d.employmentRate,
-                                    unemploymentRate: d.unemploymentRate,
-                                    weeklyEarning: d.weeklyEarning
+                                    gva: totalgva,
+                                    disposableIncome: averageDisposableIncome,
+                                    disposableIncomeIncrease: averageDisposableIncomeIncrease
                                 }
                             );
+                            
+                            //console.log(economy_array);
+
+                        }
+                        
+                        module.exports.sortResults(economy_array,"gva",false)// sorting gva in descending order
+                            var maxGVA= economy_array[0].gva;
+                            
+                            var percentage=0;
+                            var temparray=[];
+                            
+                            economy_array.forEach(function(element){// calculating rating for gva
+                                percentage= element.gva/maxGVA;
+                                //console.log("Region "+element.region+" percentage "+percentage);
+                                temparray.push({// pushing all data into temp array json
+                                    region: element.region,
+                                    gva: element.gva,
+                                    disposableIncome: element.disposableIncome,
+                                    disposableIncomeIncrease: element.disposableIncomeIncrease,
+                                    gvaPercentage: percentage,
+                                    gvaTempRating: percentage*5
+                           
+                                });
+                   
+                            });
+                            
+                        economy_array=[];
+                        economy_array=temparray;// transfering all info into economy_array json
+                        temparray=[];
+                        
+                        module.exports.sortResults(economy_array,"disposableIncome",false);// sorting disposable income in descending order
+                        var maxDI= economy_array[0].disposableIncome;// getting max disposable income
+                        
+                         economy_array.forEach(function(element){// calculating rating for disposable income
+                            percentage= element.disposableIncome/maxDI;
+                            //console.log("Region "+element.region+" percentage "+percentage);
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                gva: element.gva,
+                                disposableIncome: element.disposableIncome,
+                                disposableIncomeIncrease: element.disposableIncomeIncrease,
+                                gvaPercentage: element.gvaPercentage,
+                                gvaTempRating: element.gvaTempRating,
+                                giPercentage: percentage,
+                                giTempRating: percentage*5
+                           
+                            });
+                        });
+                        
+                        economy_array=[];
+                        economy_array=temparray;// transfering all info into economy_array json
+                        temparray=[];
+                        
+                        module.exports.sortResults(economy_array,"disposableIncomeIncrease",false)// sorting disposable income increase in descending order
+                        var maxDII= economy_array[0].disposableIncomeIncrease;// getting max disposable income
+                        
+                        economy_array.forEach(function(element){
+                            percentage= element.disposableIncomeIncrease/maxDII;
+                            //console.log("Region "+element.region+" percentage "+percentage);
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                gva: element.gva,
+                                disposableIncome: element.disposableIncome,
+                                disposableIncomeIncrease: element.disposableIncomeIncrease,
+                                gvaPercentage: element.gvaPercentage,
+                                gvaTempRating: element.gvaTempRating,
+                                giPercentage: element.giPercentage,
+                                giTempRating: element.giTempRating,
+                                giiPercentage: percentage,
+                                giiTempRating: percentage*5
+                            });
+                        });
+                        
+                        economy_array=[];
+                        economy_array=temparray;// transfering all info into economy_array json
+                        temparray=[];
+                     
+                        // for loop used to work out rating for each region regarding economy and the data is stored in economy_rating json
+                        for(var i=0; i<economy_array.length;i++){
+                    
+                            var averageRating= (economy_array[i].gvaTempRating+economy_array[i].giTempRating+economy_array[i].giiTempRating)/3;
+                            economy_rating.push(
+                            {
+                                region: economy_array[i].region,
+                                rating: averageRating.toFixed(2)
+                            }); 
+                            //console.log("region: "+economy_array[i].region+" gva rating "+economy_array[i].gvaTempRating+" gross income rating "+economy_array[i].giTempRating+" gross income increase rating "+economy_array[i].giiTempRating+ "overall rating "+averageRating.toFixed(2));
+                        }
+                        
+                        module.exports.sortResults(economy_rating,"region",true);
+                        for(var i=0;i<economy_rating.length;i++){
+                            //console.log("Region: "+economy_rating[i].region+" economy rating: "+economy_rating[i].rating);
+                        }
+                        return cb(economy_rating);
+                        
+                        
+                    });// end function
+  },
+  
+getEducationRating: function(cb){
+      var dataStore=[];
+      var education_array=[];
+      var education_rating=[];
+    // getting data and working out rating for education    
+    path= fs.createReadStream("./public/data/cat/Education_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region : d["Sub_Region"],
+                            girlGCSC : Number(d["Girls 5+ A*-C grades including maths and english (%)"]),
+                            boyGCSC : Number(d["Boys 5+ A*-C grades  including maths and english (%)"]),
+                            belowStandard : Number(d["Percentage of schools below the floor standard"])} );
+                            
+                            //console.log("datastore "+dataStore.belowStandard);
+        
+                    }).on("end", function(){
+                        for(var i=0; i<regions.length;i++){
+                            var girlGCSCAverage=0;
+                            var boyGCSCAverage=0;
+                            var belowStandardAverage=0;
+                            var overallAverage=0;
+                        
+                        
+                            dataStore.forEach(function(d){
+                                if(d.region==regions[i] && typeof(d.girlGCSC)!='undefined'){
+                                    girlGCSCAverage = d.girlGCSC;
+                                    //console.log("girls gcsc "+d.girlGCSC);
+                                }
+                                if(d.region==regions[i] && typeof(d.boyGCSC)!='undefined'){
+                                    boyGCSCAverage = d.boyGCSC;
+                                }
+                                if(d.region==regions[i] && typeof(d.belowStandard)!='undefined'){
+                                    belowStandardAverage = d.belowStandard;
+                                }
+                            });
+                        
+                            overallAverage= (girlGCSCAverage+boyGCSCAverage)/2; // overall boys and girls rating
+                            //console.log("region "+regions[i]+" overall average grade: "+overallAverage+" below standard: "+belowStandardAverage);
+                            education_array.push(
+                                {
+                                    region: regions[i],
+                                    averageGrades: overallAverage,
+                                    belowStandard: belowStandardAverage
+                                });
+                        }// end of for loop
+                        
+                        //console.log(education_array);
+                        
+                        module.exports.sortResults(education_array,"averageGrades",false); // sorting in average grade in descending order to get get max average grades
+                        var maxGrade=education_array[0].averageGrades;// max grade
+                        //console.log("max grade "+maxGrade);
+                        
+                        var percentage=0;
+                        var temparray=[];
+                        
+                        education_array.forEach(function(element){// calculating rating for grades
+                            percentage= element.averageGrades/maxGrade;
+                            //console.log("Region "+element.region+" percentage "+percentage);
+                    
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                averageGrades: element.averageGrades,
+                                belowStandard: element.belowStandard,
+                                gradePercentage: percentage,
+                                gradeTempRating: percentage*5
+                            });
+                   
+                        });
+                        
+                        education_array=[];
+                        education_array=temparray;// transfering all info into eduction_array json
+                        temparray=[];
+                        
+                        module.exports.sortResults(education_array,"belowStandard",true); // sorting in below standard school in ascending order to get low below standard
+                        var minBelowStandard=education_array[0].belowStandard;
+                        //  console.log("min below standard "+minBelowStandard);
+                        
+                        var percentage=0;
+                        var temparray=[];
+                        education_array.forEach(function(element){// calculating rating for below standard
+                            percentage= minBelowStandard/element.belowStandard;
+                            //console.log("Region "+element.region+" percentage "+percentage);
+                    
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                averageGrades: element.averageGrades,
+                                belowStandard: element.belowStandard,
+                                gradePercentage: element.gradePercentage,
+                                gradeTempRating: element.gradeTempRating,
+                                belowStandardPercentage: percentage,
+                                belowStandardTempRating: percentage*5
+                            });
+                        });
+                        
+                        education_array=[];
+                        education_array=temparray;// transfering all info into education_array json
+                        temparray=[];
+                
+                        // for loop used to work out rating for each region regarding education and the data is stored in education_rating json
+                        for(var i=0; i<education_array.length;i++){
+                    
+                            var averageRating= (education_array[i].gradeTempRating+education_array[i].belowStandardTempRating)/2;
+                            //console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
+                            // console.log("region "+education
+                            education_rating.push(
+                                {
+                                region: education_array[i].region,
+                                rating: averageRating.toFixed(2)
+                                });
+                        }
+                        
+                        module.exports.sortResults(education_rating,"region",true);
+                        for(var i=0;i<education_rating.length;i++){
+                            //console.log("Region: "+education_rating[i].region+" education rating: "+education_rating[i].rating);
+                        }
+                        
+                        return cb(education_rating);
+                
+                        
+                    });// end of end function
+  },
+  
+getEmploymentRating: function(cb){
+      var dataStore=[];
+      var employment_array=[];
+      var employment_rating=[];
+      
+    // getting data and working out rating for Employment   
+    path= fs.createReadStream("./public/data/cat/Employment_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region : d["Regions"],
+                            employmentRate : Number(d["Employment Rate"]),
+                            unemploymentRate : Number(d["Unemployment rate"]),
+                            weeklyEarning : Number(d["Median Gross Weekly Earnings (GBP)"])});
+                            
+                            //console.log("datastore "+dataStore.belowStandard);
+        
+                    }).on("end", function(){
+                        
+                for(var i=0; i<regions.length;i++){
+
+                    dataStore.forEach(function(d){           
+                        if(d.region==regions[i]){
+                            if(typeof(d.employmentRate)!='undefined' && typeof(d.unemploymentRate)!='undefined' && typeof(d.weeklyEarning)!='undefined'){
+                                //console.log("Employment: Region: "+d.region+" employment rate: "+d.employmentRate+" unemployment rate "+d.unemploymentRate+" weekly earning "+d.weeklyEarning);
+                                employment_array.push(
+                                    {
+                                        region: regions[i],
+                                        employmentRate: d.employmentRate,
+                                        unemploymentRate: d.unemploymentRate,
+                                        weeklyEarning: d.weeklyEarning
+                                    });
+                            }
                         }
                     });
                 }
-                
-                console.log("size " + employment_array.length);
-                module.exports.sortResults(employment_array,"employmentRate",false); // sorting in descending order
-                
-                var maxEmploymentRate=employment_array[0].employmentRate;
-                //console.log("max employment rate "+maxEmploymentRate);
+                // calculating rating
+                module.exports.sortResults(employment_array,"employmentRate",false); // sorting in descending order according to employment Rate
+                var maxEmploymentRate=employment_array[0].employmentRate;// getting largest regional employment rate value
                 
                 var percentage=0;
                 var temparray=[];
-                employment_array.forEach(function(element){
+                employment_array.forEach(function(element){// calculating rating for employment rate
                        percentage= element.employmentRate/maxEmploymentRate
                        //console.log("Region "+element.region+" percentage "+percentage);
                     
@@ -591,18 +465,15 @@ module.exports = {
                 });
                 
                 employment_array=[];
-                employment_array=temparray;// transfering all info into crime_array json
+                employment_array=temparray;// transfering all info into employment_array json
                 var temparray=[];
-                 
-                module.exports.sortResults(employment_array,"unemploymentRate",true); // sorting employment_array in ascending order
                 
-                var minUnemploymentRate=employment_array[0].unemploymentRate;
-                //console.log("min unemployment rate "+minUnemploymentRate);
-                
+                module.exports.sortResults(employment_array,"unemploymentRate",true); // sorting employment_array in ascending order according to unemployment rate
+                var minUnemploymentRate=employment_array[0].unemploymentRate; // regional min unemployment rate
                 
                 var percentage=0;
                 var temparray=[];
-                employment_array.forEach(function(element){
+                employment_array.forEach(function(element){// calculating rating for unemployment
                        percentage= minUnemploymentRate/element.unemploymentRate;
                        //console.log("Region "+element.region+" percentage "+percentage);
                     
@@ -619,14 +490,11 @@ module.exports = {
                 });
                 
                 employment_array=[];
-                employment_array=temparray;// transfering all info into crime_array json
+                employment_array=temparray;// transfering all info into employment_array json
                 temparray=[];
                 
-                
-                module.exports.sortResults(employment_array,"weeklyEarning",false); // sorting in descending order
-                
-                var maxWeeklyEarning=employment_array[0].weeklyEarning;
-                //console.log("max weekly earning "+maxWeeklyEarning);
+                module.exports.sortResults(employment_array,"weeklyEarning",false); // sorting in descending order acccording to weekly earning
+                var maxWeeklyEarning=employment_array[0].weeklyEarning; // geting regional hight weekly earning figure
                 
                 percentage=0;
                 temparray=[];
@@ -650,12 +518,11 @@ module.exports = {
                 });
                 
                 employment_array=[];
-                employment_array=temparray;// transfering all info into crime_array json
+                employment_array=temparray;// transfering all info into employment_array json
                 temparray=[];
                 
-                 
-                  // for loop used to work out rating for each region regarding employment and the data is stored in employment_rating json
-                for(var i=0; i<education_array.length;i++){
+                // for loop used to work out rating for each region regarding employment and the data is stored in employment_rating json
+                for(var i=0; i<employment_array.length;i++){
                     
                     var averageRating= (employment_array[i].employmentRateTempRating+employment_array[i].unemploymentRateTempRating+employment_array[i].weeklyEarningTempRating)/3;
                         //console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
@@ -667,258 +534,206 @@ module.exports = {
                             }
                         )
                 }
-                
-             for(var i=0;i<employment_rating.length;i++){
-                    console.log("Region: "+employment_rating[i].region+" employment rating: "+employment_rating[i].rating);
+                module.exports.sortResults(employment_rating,"region",true);
+                for(var i=0;i<employment_rating.length;i++){
+                    //console.log("Region: "+employment_rating[i].region+" employment rating: "+employment_rating[i].rating);
                 }
-               //console.log(employment_rating);
-             // for(var i=0;i<11;i++){
-             //        for(var j=0;j<regions.length;j++){
-             //        if(employment_rating[i].region==regions[j])
-             //        {
-                    
-             //  var tempid=idname[j][3];
-             //  $("#"+tempid).text(employment_rating[i].rating); 
-
-             //        }
-             //        }
-          
-             //    }
-
-
-
-         for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(employment_rating[j].region==regions[i]) {
-                  employment_unsortrating.push(
-                        {region:regions[i],
-                        rating:employment_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-
-        //           for(var i=0;i<employment_unsortrating.length;i++){
-        //       console.log("Region: "+employment_unsortrating[i].region+" crime rating: "+employment_unsortrating[i].rating);
-        // }
                 
-            });   
-            
-            d3.csv("./data/cat2/Housing_Meta.csv", function(d) {
-                return {
-                    region : d["Region"],
-                    percentageChange : Number(d["12 month percentage change"]),
-                    averageHousePrice: Number(d["Average house prices"])
-                };
-            }, function(data) {
+                return cb(employment_rating);
+                        
+                    });// end of end function
+  },
+  
+getHousingRating: function(cb){
+      var dataStore=[];
+      var housing_array=[];
+      var housing_rating=[];
+    // getting data and working out rating for housing  
+    path= fs.createReadStream("./public/data/cat/Housing_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region : d["Regions"],
+                            percentageChange : Number(d["12 Month Percentage Change"]),
+                            averageHousePrice: Number(d["Average House Prices (GBP)"])});
+                            
+        
+                    }).on("end", function(){
+                        
+                        for(var i=0; i<regions.length;i++){
                     
-                for(var i=0; i<regions.length;i++){
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
-                            //console.log("Housing: Region: "+d.region+" Pecentage change: "+d.percentageChange+" average house price "+d.averageHousePrice);
-                            housing_array.push(
-                                {
-                                    region: regions[i],
-                                    percentageChange: d.percentageChange,
-                                    averageHousePrice: d.averageHousePrice
+                            dataStore.forEach(function(d){
+                                if(d.region==regions[i]){
+                                    if(typeof(d.percentageChange)!='undefined' && typeof(d.averageHousePrice)!='undefined'){
+                                        //console.log("Housing: Region: "+d.region+" Pecentage change: "+d.percentageChange+" average house price "+d.averageHousePrice);
+                                        housing_array.push(
+                                        {
+                                            region: regions[i],
+                                            percentageChange: d.percentageChange,
+                                            averageHousePrice: d.averageHousePrice
+                                        });
+                                    }
                                 }
-                            );
+                        
+                            });
                         }
-                    });
-                }
-                
-                module.exports.sortResults(housing_array,"percentageChange",true); // sorting housing_array in ascending order by percentage change
-                
-                var minPercentageChange=housing_array[0].percentageChange;
-                //console.log("max employment rate "+maxEmploymentRate);
-                
-                var percentage=0;
-                var temparray=[];
-                housing_array.forEach(function(element){
-                       percentage= minPercentageChange/element.percentageChange;
-                       //console.log("Region "+element.region+" percentage of percentage change "+percentage);
+                        
+                        module.exports.sortResults(housing_array,"percentageChange",true); // sorting housing_array in ascending order by percentage change
+                        var minPercentageChange=housing_array[0].percentageChange;
+                        
+                        var percentage=0;
+                        var temparray=[];
+                        housing_array.forEach(function(element){
+                            percentage= minPercentageChange/element.percentageChange;
+                            //console.log("Region "+element.region+" percentage of percentage change "+percentage);
                     
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           percentageChange: element.percentageChange,
-                           averageHousePrice: element.averageHousePrice,
-                           percentageChangePercentage: percentage,
-                           percentageChangeTempRating: percentage*5
-                       });
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                percentageChange: element.percentageChange,
+                                averageHousePrice: element.averageHousePrice,
+                                percentageChangePercentage: percentage,
+                                percentageChangeTempRating: percentage*5
+                            });
                    
-                });
+                        });
                 
-                housing_array=[];
-                housing_array=temparray;// transfering all info into crime_array json
-                 
-                module.exports.sortResults(housing_array,"averageHousePrice",true); // sorting housing_array in ascending order by average house price
-                
-                var minAverageHousePrice=housing_array[0].averageHousePrice;
-                //console.log("min unemployment rate "+minUnemploymentRate);
-                
-                
-                percentage=0;
-                temparray=[];
-                housing_array.forEach(function(element){
-                       percentage= minAverageHousePrice/element.averageHousePrice;
-                       //console.log("Region "+element.region+" percentage of average house price "+percentage);
+                        housing_array=[];
+                        housing_array=temparray;// transfering all info into housing_array json
+                        
+                        module.exports.sortResults(housing_array,"averageHousePrice",true); // sorting housing_array in ascending order by average house price
+                        var minAverageHousePrice=housing_array[0].averageHousePrice;
+                        
+                        percentage=0;
+                        temparray=[];
+                        housing_array.forEach(function(element){
+                            percentage= minAverageHousePrice/element.averageHousePrice;
+                            //console.log("Region "+element.region+" percentage of average house price "+percentage);
                     
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           percentageChange: element.percentageChange,
-                           averageHousePrice: element.averageHousePrice,
-                           percentageChangePercentage: element.percentageChangePercentage,
-                           percentageChangeTempRating: element.percentageChangeTempRating,
-                           averageHousePricePercentage: percentage,
-                           averageHousePriceTempRating: percentage*5
-                       });
-                });
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                percentageChange: element.percentageChange,
+                                averageHousePrice: element.averageHousePrice,
+                                percentageChangePercentage: element.percentageChangePercentage,
+                                percentageChangeTempRating: element.percentageChangeTempRating,
+                                averageHousePricePercentage: percentage,
+                                averageHousePriceTempRating: percentage*5
+                            });
+                        });
                 
-                housing_array=[];
-                housing_array=temparray;// transfering all info into crime_array json
-                temparray=[];
-                
-                
-                
-                 
-                  // for loop used to work out rating for each region regarding employment and the data is stored in housing_rating json
-                for(var i=0; i<housing_array.length;i++){
+                        housing_array=[];
+                        housing_array=temparray;// transfering all info into housing_array json
+                        temparray=[];
+                        
+                        // for loop used to work out rating for each region regarding employment and the data is stored in housing_rating json
+                        for(var i=0; i<housing_array.length;i++){
                     
-                    var averageRating= (housing_array[i].percentageChangeTempRating+housing_array[i].averageHousePriceTempRating)/2;
-                        //console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
+                            var averageRating= (housing_array[i].percentageChangeTempRating+housing_array[i].averageHousePriceTempRating)/2;
+                            //console.log("region "+education_array[i].region+" grade rating: "+education_array[i].gradeTempRating+" below standard grade "+education_array[i].belowStandardTempRating);
                     
-                        housing_rating.push(
+                            housing_rating.push(
                             {
                                 region: housing_array[i].region,
                                 rating: averageRating.toFixed(2)
-                            }
-                        )
-                }
-                
-             for(var i=0;i<housing_rating.length;i++){
-                    console.log("Region: "+housing_rating[i].region+" housing rating: "+housing_rating[i].rating);
-                }
-               //console.log(employment_rating);
-            // for(var i=0;i<11;i++){
-            //         for(var j=0;j<regions.length;j++){
-            //         if(housing_rating[i].region==regions[j])
-            //         {
-                    
-            //   var tempid=idname[j][4];
-            //   $("#"+tempid).text(housing_rating[i].rating); 
-
-            //         }
-            //         }
-          
-            //     }
-
-        for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(housing_rating[j].region==regions[i]) {
-                  housing_unsortrating.push(
-                        {region:regions[i],
-                        rating:housing_rating[j].rating
+                            });
                         }
-                    ) 
-                }
-            }
-        }
-
-        //               for(var i=0;i<housing_unsortrating.length;i++){
-        //       console.log("Region: "+housing_unsortrating[i].region+" crime rating: "+housing_unsortrating[i].rating);
-        // }    
-            });
-            
-            d3.csv("./data/cat2/Population_Meta.csv", function(d) {
-                return {
-                    region : d["Region"],
-                    populationDensity : Number(d["Population density mid-20121 (People per sq km)"]),
-                    lifeExpectancy: Number(d["Average life expectancy"]),
-                    crimeDensity: Number(d["Crime per 1000 people"])
-                };
-            }, function(data) {
+                        module.exports.sortResults(housing_rating,"region",true);
+                        for(var i=0;i<housing_rating.length;i++){
+                            //console.log("Region: "+housing_rating[i].region+" housing rating: "+housing_rating[i].rating);
+                        }
+                        return cb(housing_rating);
+                        
+                    }); // end of end function  
+  },
+  
+getPopulationRating: function(cb){
+      var dataStore=[];
+      var population_array=[];
+      var population_rating=[];
+    // getting data and working out rating for population   
+    path= fs.createReadStream("./public/data/cat/Population_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region : d["Regions"],
+                            populationDensity: d["Population density"],
+                            lifeExpectancy: Number(d["Average Life Expectancy"]),
+                            crimeDensity: Number(d["Crime per 1000 people"])});
+        
+                    }).on("end", function(){
+                        for(var i=0; i<regions.length;i++){
                     
-                for(var i=0; i<regions.length;i++){
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
-                            //console.log("Population: Region: "+d.region+" Population density: "+d.populationDensity+" life expectancy  "+d.lifeExpectancy+" crime density "+d.crimeDensity);
+                            dataStore.forEach(function(d){
                             
-                            population_array.push(
-                                {
-                                    region: regions[i],
-                                    populationDensity: d.populationDensity,
-                                    lifeExpectancy: d.lifeExpectancy,
-                                    crimeDensity: d.crimeDensity
+                                if(d.region==regions[i]){
+                                    if(typeof(d.populationDensity)!='undefined' && typeof(d.lifeExpectancy)!='undefined' && typeof(d.crimeDensity)!='undefined'){
+                                        //console.log("Population: Region: "+d.region+" population density: "+d.populationDensity+" life expectancy  "+d.lifeExpectancy+" crime density "+d.crimeDensity);
+                            
+                                        population_array.push(
+                                        {
+                                            region: regions[i],
+                                            populationDensity: d.populationDensity,
+                                            lifeExpectancy: d.lifeExpectancy,
+                                            crimeDensity: d.crimeDensity
+                                        });
+                                    }
                                 }
-                            );
+                        
+                            });
                         }
-                    });
-                }
-                
-                module.exports.sortResults(population_array,"populationDensity",true); // sorting population_array in ascending order by population density
-                
-                var minPopulationDensity=population_array[0].populationDensity;
-                //console.log("max employment rate "+maxEmploymentRate);
-                
-                var percentage=0;
-                var temparray=[];
-                population_array.forEach(function(element){
-                       percentage= minPopulationDensity/element.populationDensity;
-                       //console.log("Region "+element.region+" percentage of population density "+percentage);
+                        
+                        module.exports.sortResults(population_array,"populationDensity",true); // sorting population_array in ascending order by population density
+                        var minPopulationDensity=population_array[0].populationDensity;
+                        //console.log("min population density "+minPopulationDensity);
+                        var percentage=0;
+                        var temparray=[];
+                        population_array.forEach(function(element){// calculating rating in regards to total population
+                            percentage= minPopulationDensity/element.populationDensity;
+                            //console.log("Region "+element.region+" percentage of population density "+percentage);
                     
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           populationDensity: element.populationDensity,
-                           lifeExpectancy: element.lifeExpectancy,
-                           crimeDensity: element.crimeDensity,
-                           populationDensityPercentage: percentage,
-                           populationDensityTempRating: percentage*5
-                       });
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                populationDensity: element.totalPopulation,
+                                lifeExpectancy: element.lifeExpectancy,
+                                crimeDensity: element.crimeDensity,
+                                populationDensityPercentage: percentage,
+                                populationDensityTempRating: percentage*5
+                            });
                    
-                });
-                
-                population_array=[];
-                population_array=temparray;// transfering all info into crime_array json
-                 
-                module.exports.sortResults(population_array,"lifeExpectancy",false); // sorting population in descending order by life expectancy
-                
-                var maxLifeExpectancy=population_array[0].lifeExpectancy;
-                //console.log("min unemployment rate "+minUnemploymentRate);
-                
-                
-                percentage=0;
-                temparray=[];
-                population_array.forEach(function(element){
-                       percentage= element.lifeExpectancy/maxLifeExpectancy;
-                       //console.log("Region "+element.region+" percentage of life expectancy "+percentage);
+                        });
+                        
+                        population_array=[];
+                        population_array=temparray;// transfering all info into population_array json
+                        
+                        module.exports.sortResults(population_array,"lifeExpectancy",false); // sorting population in descending order by life expectancy
+                        var maxLifeExpectancy=population_array[0].lifeExpectancy;
+                        
+                        percentage=0;
+                        temparray=[];
+                        population_array.forEach(function(element){// calculating rating in regards to life expectancy
+                            percentage= element.lifeExpectancy/maxLifeExpectancy;
+                            //console.log("Region "+element.region+" percentage of life expectancy "+percentage);
                     
-                       temparray.push({// pushing all data into temp array json
-                           region: element.region,
-                           populationDensity: element.populationDensity,
-                           lifeExpectancy: element.lifeExpectancy,
-                           crimeDensity: element.crimeDensity,
-                           populationDensityPercentage: element.populationDensityPercentage,
-                           populationDensityTempRating: element.populationDensityTempRating,
-                           lifeExpectancyPercentage: percentage,
-                           lifeExpectancyTempRating: percentage*5
-                       });
-                });
-                
-                population_array=[];
-                population_array=temparray;// transfering all info into population_array json
-                
-                module.exports.sortResults(population_array,"crimeDensity",true); // sorting population in ascending order by crime density
-                
-                var minCrimeDensity=population_array[0].crimeDensity;
-                //console.log("min unemployment rate "+minUnemploymentRate);
-                
-                percentage=0;
-                temparray=[];
-                population_array.forEach(function(element){
-                       percentage= minCrimeDensity/element.crimeDensity;
+                            temparray.push({// pushing all data into temp array json
+                                region: element.region,
+                                populationDensity: element.populationDensity,
+                                lifeExpectancy: element.lifeExpectancy,
+                                crimeDensity: element.crimeDensity,
+                                populationDensityPercentage: element.populationDensityPercentage,
+                                populationDensityTempRating: element.populationDensityTempRating,
+                                lifeExpectancyPercentage: percentage,
+                                lifeExpectancyTempRating: percentage*5
+                            });
+                        });
+                        
+                        population_array=[];
+                        population_array=temparray;// transfering all info into population_array json
+                        module.exports.sortResults(population_array,"crimeDensity",true); // sorting population in ascending order by crime density 
+                        
+                         var minCrimeDensity=population_array[0].crimeDensity;// getting min crime density
+                        //console.log("min unemployment rate "+minUnemploymentRate);
+                        
+                        percentage=0;
+                        temparray=[];
+                    population_array.forEach(function(element){
+                        percentage= minCrimeDensity/element.crimeDensity;
                        //console.log("Region "+element.region+" percentage of crime density "+percentage);
                     
                        temparray.push({// pushing all data into temp array json
@@ -932,78 +747,65 @@ module.exports = {
                            lifeExpectancyTempRating: element.lifeExpectancyTempRating,
                            crimeDensityPercentage: percentage,
                            crimeDensityTempRating: percentage*5
-                       });
-                });
+                        });
+                    });
                 
                 population_array=[];
                 population_array=temparray;// transfering all info into population_array json
                 
-                 
-                  // for loop used to work out rating for each region regarding employment and the data is stored in housing_rating json
+                // for loop used to work out rating for each region regarding employment and the data is stored in population_rating json
                 for(var i=0; i<population_array.length;i++){
                     
                     var averageRating= (population_array[i].populationDensityTempRating+population_array[i].lifeExpectancyTempRating+population_array[i].crimeDensityTempRating)/3;
                         //console.log("region "+population_array[i].region+" grade rating: "+averageRating);
                     
+                    if(averageRating>5){
                         population_rating.push(
                             {
                                 region: population_array[i].region,
-                                rating: averageRating.toFixed(2)
+                                rating: Number(5.0)
                             }
-                        )
+                        );
+                    }else{
+                        population_rating.push(
+                            {
+                                region: population_array[i].region,
+                                rating: Number(averageRating.toFixed(2))
+                            }
+                        );
+                    }
                 }
-                
-             for(var i=0;i<population_rating.length;i++){
-                    console.log("Region: "+population_rating[i].region+" population rating: "+population_rating[i].rating);
+                module.exports.sortResults(population_rating,"region",true);
+                for(var i=0;i<population_rating.length;i++){
+                    //console.log("Region: "+population_rating[i].region+" population rating: "+population_rating[i].rating);
                 }
-               //console.log(population_array);
-           // for(var i=0;i<11;i++){
-           //          for(var j=0;j<regions.length;j++){
-           //          if(population_rating[i].region==regions[j])
-           //          {
+                        return cb(population_rating);
+                    });// end of end function
+  },
+  
+  
+      
+getSocialRating: function(cb){
+      var dataStore=[];
+      var social_array=[];
+      var social_rating=[];
+    // getting data and working out rating for population   
+    path= fs.createReadStream("./public/data/cat/Social_Meta.csv")
+    csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
+            dataStore.push( {
+                            region : d["Regions"],
+                            veryGood : Number(d["Very Healthy Population (%)"]),
+                            good : Number(d["Healthy Population (%)"]),
+                            fair : Number(d["Moderate Healthy Population (%)"]),
+                            bad : Number(d["Unhealthy Population (%)"]),
+                            veryBad : Number(d["Very Unhealthy Population (%)"])});
+        
+                    }).on("end", function(){
+                for(var i=0; i<regions.length;i++){
                     
-           //    var tempid=idname[j][5];
-           //    $("#"+tempid).text(population_rating[i].rating); 
-
-           //          }
-           //          }
-          
-           //      }
-
-        for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(population_rating[j].region==regions[i]) {
-                  population_unsortrating.push(
-                        {region:regions[i],
-                        rating:population_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-           
-        //   for(var i=0;i<population_unsortrating.length;i++){
-        //       console.log("Region: "+population_unsortrating[i].region+" crime rating: "+population_unsortrating[i].rating);
-        // }
-
-            }); 
-            
-            d3.csv("./data/cat2/Social_Meta.csv", function(d) {
-                return {
-                    region : d["Regions"],
-                    veryGood : Number(d["Very good"]),
-                    good : Number(d["Good"]),
-                    fair : Number(d["Fair"]),
-                    bad : Number(d["Bad"]),
-                    veryBad : Number(d["Very bad"])
-                };
-            }, function(data) {
-                    
-                
-             for(var i=0; i<regions.length;i++){
-                    
-                    data.forEach(function(d){
-                        if(d.region==regions[i]){
+                    dataStore.forEach(function(d){
+                        if(typeof(d.veryGood)!='undefined' && typeof(d.good)!='undefined' && typeof(d.fair)!='undefined' && typeof(d.bad)!='undefined' && typeof(d.veryBad)!='undefined'){
+                        if(d.region==regions[i] ){
                             //console.log("social: Region: "+d.region+" very good: "+d.veryGood+" good "+d.good+" fair "+d.fair+" bad"+d.bad+" very bad "+d.veryBad);
                             social_array.push(
                                 {
@@ -1021,7 +823,7 @@ module.exports = {
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: 5.00
+                                        rating: (5.00).toFixed(2)
                                     }
                                 );
                                 
@@ -1031,7 +833,7 @@ module.exports = {
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: 4.00
+                                        rating: (4.00).toFixed(2)
                                     }
                                 );
                             }
@@ -1040,7 +842,7 @@ module.exports = {
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: 3.00
+                                        rating: (3.00).toFixed(2)
                                     }
                                 );
                             }
@@ -1049,7 +851,7 @@ module.exports = {
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: 2.00
+                                        rating: (2.00).toFixed(2)
                                     }
                                 );
                             }
@@ -1058,316 +860,237 @@ module.exports = {
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: 1.00
+                                        rating: (1.00).toFixed(2)
                                     }
                                 );
                             }
                         }
+                        }
                     });
                 }
-                
+                module.exports.sortResults(social_rating,"region",true);
                 for(var i=0;i<social_rating.length;i++){
-                    console.log("Region: "+social_rating[i].region+" social rating: "+social_rating[i].rating);
+                    //console.log("Region: "+social_rating[i].region+" social rating: "+social_rating[i].rating);
                 }
-               //console.log(population_array);
-
-              //       for(var i=0;i<11;i++){
-              //       for(var j=0;j<regions.length;j++){
-              //       if(social_rating[i].region==regions[j])
-              //       {
+                        //console.log(social_rating);
+                        return cb(social_rating);
+                    });// end of end function
                     
-              // var tempid=idname[j][6];
-              // $("#"+tempid).text(social_rating[i].rating); 
-
-              //       }
-              //       }
-          
-              //   }
-
-        for(var i=0;i<11;i++){
-            for(var j=0;j<regions.length;j++){
-              if(social_rating[j].region==regions[i]) {
-                  social_unsortrating.push(
-                        {region:regions[i],
-                        rating:social_rating[j].rating
-                        }
-                    ) 
-                }
-            }
-        }
-
-        //           for(var i=0;i<social_unsortrating.length;i++){
-        //       console.log("Region: "+social_unsortrating[i].region+" crime rating: "+social_unsortrating[i].rating);
-        // }
-                
-            }); 
-
-
-             new_rating.push(
-                        {region:"North East",  rating:0},{region:"North West",rating:0},{region:"Yorkshire and the Humber",rating:0},{region:"East Midlands",rating:0},{region:"West Midlands",rating:0},{region:"East of England",rating:0},{region:"London",rating:0},{region:"South East",rating:0},{region:"South West",rating:0},{region:"Wales",rating:0},{region:"Scotland",rating:0}
-                    );
-      return null;
+                    
+                    
   },
-  getPreferenceRating: function(p1, p2, p3) {
-  for(var i=0;i<11;i++){
-            new_rating[i].rating=0;
+ 
+  
+getOverallRating: function(cb){
+      
+      module.exports.getSocialRating(function(socialRatingArray){
+        module.exports.getPopulationRating(function(populationRatingArray){
+            module.exports.getHousingRating(function(housingRatingArray){
+                module.exports.getEmploymentRating(function(employmentRatingArray){
+                    module.exports.getEducationRating(function(educationRatingArray){
+                        module.exports.getEconomyRating(function(economyRatingArray){
+                            module.exports.getCrimeRating(function(crimeRatingArray){
+                                var overall_rating=[];
+                                for(var i=0;i<regions.length;i++){
+                                    
+                                    //console.log("region crime: "+crimeRatingArray[i].region+" region economy: "+economyRatingArray[i].region+" region education: "+educationRatingArray[i].region+" region employment: "+employmentRatingArray[i].region+" region housing: "+housingRatingArray[i].region+" region population: "+populationRatingArray[i].region+" region social: "+socialRatingArray[i].region);
+                                    
+                                    var rating= (Number(crimeRatingArray[i].rating)+Number(economyRatingArray[i].rating)+Number(educationRatingArray[i].rating)+Number(employmentRatingArray[i].rating)+Number(housingRatingArray[i].rating)+Number(populationRatingArray[i].rating)+Number(socialRatingArray[i].rating))/7;
+                                    //console.log(crimeRatingArray[i].rating+" "+economyRatingArray[i].rating+" "+educationRatingArray[i].rating+" "+employmentRatingArray[i].rating+" "+housingRatingArray[i].rating+" "+populationRatingArray[i].rating+" "+socialRatingArray[i].rating);
+                                    //console.log(rating);
+                                    overall_rating.push(
+                                    {
+                                        region: regions[i],
+                                        rating: rating.toFixed(2)
+                                    }
+                                    );
+                                }
+                                
+                                
+                                return cb(overall_rating);
+        
+                            });
+        
+                        });
+        
+                    });
 
-        }
+                });
 
-      //alert($("#region2").val());
-      //var region=$("#region").val();
-      //preference 1
-      var p1=$("#p1").val();
-      //preference 2
-      var p2=$("#p2").val();
-      //preference 3
-      var p3=$("#p3").val();
-    // if two of the preference are same ,return. and dont do anything
-      if((p1==p2)||(p1==p3)||(p2==p3)){
-       alert("please enter the different preference");      
-        return;
-}
+            });
 
-    //  var crime1=idname[10][0];
-    //   $("#"+crime1).text(1); 
-    // var crime2=idname[10][2];
-    //   $("#"+crime2).text(1); 
-    // var education=idname[9][2];
-    //   $("#"+education).text(1); 
+        });
 
-
-    //calculate the new rating according to the preference
-  if(p1=="Crime"){
-    for(var j=0;j<11;j++){
-
-        var temp=crime_unsortrating[j].rating;
-    //var idntifiy=idname[j][0];
-    //preference 1 occupy 25%
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-     }
-  if(p1=="Economy"){
-   for(var j=0;j<11;j++){
-    var temp=economy_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-  }
-   if(p1=="Education"){ 
-  for(var j=0;j<11;j++){
-   var temp=education_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-   }
-    
-   if(p1=="Employment"){ 
-  for(var j=0;j<11;j++){
-      var temp=employment_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-   }
-
-
-   if(p1=="Housing"){
- for(var j=0;j<11;j++){
-     var temp=housing_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-   }
-   
-    if(p1=="Social"){
-         for(var j=0;j<11;j++){
-    var temp=social_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-    }
-    if(p1=="Population"){
-         for(var j=0;j<11;j++){
-      var temp=population_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.25;
-     }
-    }
-
-
-//preference 2 occupy 20%
-      if(p2=="Crime"){
-    for(var j=0;j<11;j++){
-      var temp=crime_unsortrating[j].rating;
-    //var idntifiy=idname[j][0];
-    //preference 1 occupy 25%
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-  //document.getElementById(idntifiy).value=new_rating[j].value;
-        }
-     }
-  if(p2=="Economy"){
-  for(var j=0;j<11;j++){
-    var temp=economy_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }
-  }
-   if(p2=="Education"){ 
-for(var j=0;j<11;j++){
-   var temp=education_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }
-   }
-    
-   if(p2=="Employment"){ 
- for(var j=0;j<11;j++){
-      var temp=employment_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }
-   }
-
-
-   if(p2=="Housing"){
-for(var j=0;j<11;j++){
-     var temp=housing_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }
-   }
-   
-    if(p2=="Social"){
-        for(var j=0;j<11;j++){
-    var temp=social_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }
-    }
-    if(p2=="Population"){
-     for(var j=0;j<11;j++){
-      var temp=population_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.2;
-     }    }
-
-    //preference 1 occupy 15%
-      if(p3=="Crime"){
- for(var j=0;j<11;j++){
-      var temp=crime_unsortrating[j].rating;
-    //var idntifiy=idname[j][0];
-    //preference 1 occupy 25%
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-  //document.getElementById(idntifiy).value=new_rating[j].value;
-        }
-     }
-  if(p3=="Economy"){
-  for(var j=0;j<11;j++){
-    var temp=economy_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-  }
-   if(p3=="Education"){ 
-for(var j=0;j<11;j++){
-   var temp=education_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-   }
-    
-   if(p3=="Employment"){ 
-  for(var j=0;j<11;j++){
-      var temp=employment_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-   }
-
-
-   if(p3=="Housing"){
- for(var j=0;j<11;j++){
-     var temp=housing_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-   }
-   
-    if(p3=="Social"){
-       for(var j=0;j<11;j++){
-    var temp=social_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-    }
-    if(p3=="Population"){
-            for(var j=0;j<11;j++){
-      var temp=population_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.15;
-     }
-
-    }
-  // others occupy 10%
-  for(var i=0;i<category.length;i++){
-   if((category[i]!=p1)&&(category[i]!=p2)&&(category[i]!=p3)){
-    if(category[i]=="Crime"){
- for(var j=0;j<11;j++){
-      var temp=crime_unsortrating[j].rating;
-    //var idntifiy=idname[j][0];
-    //preference 1 occupy 25%
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-  //document.getElementById(idntifiy).value=new_rating[j].value;
-        }
-     }
-  if(category[i]=="Economy"){
-  for(var j=0;j<11;j++){
-    var temp=economy_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-  }
-   if(category[i]=="Education"){ 
-for(var j=0;j<11;j++){
-   var temp=education_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-   }
-    
-   if(category[i]=="Employment"){ 
-  for(var j=0;j<11;j++){
-      var temp=employment_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-   }
-
-
-   if(category[i]=="Housing"){
- for(var j=0;j<11;j++){
-     var temp=housing_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-   }
-   
-    if(category[i]=="Social"){
-       for(var j=0;j<11;j++){
-    var temp=social_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-    }
-    if(category[i]=="Population"){
-            for(var j=0;j<11;j++){
-      var temp=population_unsortrating[j].rating;
-  new_rating[j].rating=parseFloat(new_rating[j].rating)+parseFloat(temp)*0.1;
-     }
-
-    }
-   }
-  }
-
-  for(var i=0;i<new_rating.length;i++){
-              console.log("Region: "+new_rating[i].region+" new rating: "+new_rating[i].rating);
-        }
-
-    
-
-  //   for(var i=0;i<11;i++){
-  // //var s ＝Math.round(new_rating[i].value);
-  //  //console.log(s);
-  // // new_rating[i].value=parseInt(s);
-  //  }
-//the new rating of 11 regions
-
- sortResults(new_rating,"rating",false);  
-    return new_rating;
-  },
-  sortResults: function(myArray,prop, asc){
-    return myArray = myArray.sort(function(a, b) {
-            if (asc) {
-                return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
-            } else {
-                return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
-            }
     });
-  }
-};
+    
+  },
+ 
+    
+getPreferenceRating: function(p1,p2,p3,cb){
+        
+        module.exports.getSocialRating(function(socialRatingArray){
+            module.exports.getPopulationRating(function(populationRatingArray){
+                module.exports.getHousingRating(function(housingRatingArray){
+                    module.exports.getEmploymentRating(function(employmentRatingArray){
+                        module.exports.getEducationRating(function(educationRatingArray){
+                        module.exports.getEconomyRating(function(economyRatingArray){
+                                module.exports.getCrimeRating(function(crimeRatingArray){
+                                    if((p1==p2)||(p1==p3)||(p2==p3)){
+          
+                                        return cb(0);
+                                    }
+                                    else{
+                                        var new_preference_rating=[];
+                                        for(var i=0; i< regions.length;i++){
+                                            var crimeRating=0;
+                                            var economyRating=0;
+                                            var educationRating=0;
+                                            var employmentRating=0;
+                                            var housingRating=0;
+                                            var populationRating=0;
+                                            var socialRating=0;
+                                            
+                                            // checking crime preference
+                                            if(p1=="crime"){
+                                                var crimeRating= (Number(crimeRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="crime"){
+                                                var crimeRating= (Number(crimeRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="crime"){
+                                                var crimeRating= (Number(crimeRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var crimeRating= (Number(crimeRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking economy preference
+                                            if(p1=="economy"){
+                                                var economyRating= (Number(economyRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="economy"){
+                                                var economyRating= (Number(economyRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="economy"){
+                                                var economyRating= (Number(economyRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var economyRating= (Number(economyRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking education preference
+                                            if(p1=="education"){
+                                                var educationRating= (Number(educationRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="education"){
+                                                var educationRating= (Number(educationRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="education"){
+                                                var educationRating= (Number(educationRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var educationRating= (Number(educationRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking employment preference
+                                            if(p1=="employment"){
+                                                var employmentRating= (Number(employmentRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="employment"){
+                                                var employmentRating= (Number(employmentRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="employment"){
+                                                var employmentRating= (Number(employmentRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var employmentRating= (Number(employmentRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking housing preference
+                                            if(p1=="housing"){
+                                                var housingRating= (Number(housingRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="housing"){
+                                                var housingRating= (Number(housingRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="housing"){
+                                                var housingRating= (Number(housingRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var housingRating= (Number(housingRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking population preference
+                                            if(p1=="population"){
+                                                var populationRating= (Number(populationRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="population"){
+                                                var populationRating= (Number(populationRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="population"){
+                                                var populationRating= (Number(populationRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var populationRating= (Number(populationRatingArray[i].rating)*0.10);
+                                            }
+                                            
+                                            // checking social preference
+                                            if(p1=="social"){
+                                                var socialRating= (Number(socialRatingArray[i].rating)*0.25);
+                                            }
+                                            else if(p2=="social"){
+                                                var socialRating= (Number(socialRatingArray[i].rating)*0.20);
+                                            }
+                                            else if(p3=="social"){
+                                                var socialRating= (Number(socialRatingArray[i].rating)*0.15);
+                                            }
+                                            else
+                                            {
+                                                var socialRating= (Number(socialRatingArray[i].rating)*0.10);
+                                            }
+                                            var rating= crimeRating+economyRating+educationRating+employmentRating+housingRating+populationRating+socialRating;
+                                            
+                                            new_preference_rating.push(
+                                                    {
+                                                    region: regions[i],
+                                                    rating: rating.toFixed(2)
+                                                    }
+                                                );
+                                                
+                                                
+                                        }
+                                        return cb(new_preference_rating);
+                                    }
+        
+                                });
+        
+                            });
+        
+                        });
+    
+                    });
+
+                });
+
+            });
+
+        });
+    }
+    
+    
+}
+/*/getPreferenceRating("crime","employment","education",function(final_rating){
+        console.log(final_rating)
+        
+    });*/
+    
+/*/ getOverallRating(function(final_ratings){
+console.log(final_ratings);
+});*/
+    

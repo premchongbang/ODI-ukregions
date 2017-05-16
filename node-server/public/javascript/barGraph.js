@@ -54,13 +54,11 @@ function drawGraph(id, region, dataName, filter){
 		
 		//console.log(categories[0]);	
 		var selection = categories[0];
-		console.log(selection);
 		
 		formated = data.map(function(d){return {Sub_Region: d.Sub_Region,
 		values:+d[selection]};
-	});
+		});
 	
-	console.log(formated);
 	    var min = d3.min(data, function(d){
 					return +d[selection]*1.1;
 				});
@@ -75,7 +73,7 @@ function drawGraph(id, region, dataName, filter){
 				max = 0;
 			}
 		}
-		console.log(min,max);
+
 		//console.log(categories);
 		var x = d3.scale.linear()
 				.domain([min, max])
@@ -158,7 +156,6 @@ function drawGraph(id, region, dataName, filter){
 						max = 0;
 					}
 				}
-				console.log(min,max);
 				//console.log(categories);
 				var x = d3.scale.linear()
 						.domain([min, max])
