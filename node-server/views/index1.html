@@ -124,33 +124,41 @@
         </div>
 
         <div class ="right-sub-container right" id="right-sub-container-right">
-          <div style="height: 20px; margin-bottom:30px;">
-            <section title=".slideThree" style="margin-bottom: 10px;">
-                <div class="slideThree" style="margin-bottom: 10px;">  
-                  <input type="checkbox" onclick="changeMode(this)" value=true id="slideThree" name="check" checked />
-                  <label for="slideThree"> Mode </label>
-                </div>
-            </section>
+          
+          <div class="slideThree">  
+            <input type="checkbox" onclick="changeMode(this)" value=true id="slideThree" name="check" checked />
+            <label for="slideThree"> Mode </label>
           </div>
-
-          <div class = "preference-box" id="pref" style="display: none;">
+          
+          <div class = "preference" id="pref" style="display: none;">
             <label>Your preference:</label>
-            <br><br>
-            <label>Preference 1</label>
-            <select id="p1"  style="border: 1px solid #0000ff;">
-                <option selected="selected">Crime</option>
+            <select id="p0"  style="border: 1px solid #0000ff; height: 5px; margin: 0; visibility: hidden;">
+                <option>Social</option>
                 <option>Economy</option>
                 <option>Education</option>
                 <option>Employment</option>
                 <option>Housing</option>
                 <option>Population</option>
                 <option>Social</option>
+                <option>Crime</option>
+            </select>
+            <br>
+            <label>Preference 1</label>
+            <select id="p1"  style="border: 1px solid #0000ff;">
+                <option>Social</option>
+                <option>Economy</option>
+                <option>Education</option>
+                <option>Employment</option>
+                <option>Housing</option>
+                <option>Population</option>
+                <option>Social</option>
+                <option>Crime</option>
             </select>
             <br>
             <label>Preference 2</label>
             <select id="p2" style="border: 1px solid #0000ff;">
-                <option>Crime</option>
                 <option >Economy</option>
+                <option>Crime</option>
                 <option>Education</option>
                 <option>Employment</option>
                 <option>Housing</option>
@@ -160,9 +168,9 @@
             <br>
             <label>Preference 3</label>
             <select id="p3" style="border: 1px solid #0000ff;">
+                <option >Education</option>
                 <option>Crime</option>
                 <option>Economy</option>
-                <option >Education</option>
                 <option>Employment</option>
                 <option>Housing</option>
                 <option>Population</option>

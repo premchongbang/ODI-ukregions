@@ -138,8 +138,12 @@ function drawMap(id){
         .on('click', function(d){ if(topic !== ""){
                                     openNav(navid, d.properties.EER13NM, topic);
                                   } else {
-                                    drawChart();
-                                  } })                  
+                                    if(!isEmpty(ratings)){
+                                      console.log(" rating " + ratings.London);
+                                      drawChart(d.properties.EER13NM);
+                                    }
+                                  } 
+                                })                  
         .append("svg:title")
               .attr("transform", function (d, i) { return "translate(" + path.centroid(d) + ")"; })
               .attr("dy", ".35em")
@@ -150,6 +154,15 @@ function drawMap(id){
         .attr("class", "mesh")
         .attr("d", path);
   });
+}
+
+// checking for empty objects
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
 }
 
 function openNav(element, region, dataName) {
@@ -211,12 +224,18 @@ function setTopicBack(){
   console.log("topic " + topic);
 }
 
-function drawChart(){
+function drawChart(region){
+
+  for(key in ratings){
+    if(region === key){
+      console.log("match . key " + key + " region " + region + " value " + ratings[key]);
+    }
+  }
 
   d3.select("#chart").remove();
       
   var container = document.getElementById("graph");
-  console.log("look here "+ container);
+
   var τ = 2 * Math.PI,
       width = getInt(container.style.width),
       height = getInt(container.style.height);
@@ -230,13 +249,10 @@ function drawChart(){
     var prodName = splits[0];
     var prodId = splits[1];
 
-
   var arc = d3.svg.arc()
       .innerRadius(innerRadius)
       .outerRadius(outerRadius)
       .startAngle(0);
-
-      console.log(" viewBox " + width);
 
   var svg = d3.select("#graph").append("svg")
       .attr("id","chart")
@@ -275,6 +291,7 @@ function drawChart(){
     transition.attrTween("d", function(d) {
 
         var interpolate = d3.interpolate(d.endAngle, newAngle);
+        console.log("test one " + interpolate + " " + d.endAngle + " " + newAngle );
         
         return function(t) {
             
@@ -314,6 +331,7 @@ function getInt(myString){
             document.getElementById("clientmsg").innerHTML = "Please select unique categories.";
           } else {
             //var customList = {ID : 3, one : $("#p1").val(), two : $("#p1").val(), three : $("#p1").val()};
+            document.getElementById("clientmsg").innerHTML = "";
             $.ajax({
               type : 'POST',
               url : '/getPreferenceRating',
@@ -431,8 +449,8 @@ function getInt(myString){
       function change(elemt){
         if(elemt.value === "true"){
 
+          // getting all radios button by name and unchecking them
           for(x = 0; x < allRadios.length; x++){
-
             allRadios[x].checked = false;
           }
 
