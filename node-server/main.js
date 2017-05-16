@@ -120,6 +120,15 @@ app.get('/', function (req, res) {
   console.log("\n");
   
   helper.getPopulationRating(function(populationRating){
+	var prefData = {};
+
+    for (var i = 0; i < populationRating.length; i++) {
+      var region = populationRating[i].region;
+      var rating = populationRating[i].rating;
+      prefData[region] = rating;
+    }
+
+    sendPackage["Population"] = prefData;
     for(var i=0;i<11;i++){
       console.log("Population: Region: "+populationRating[i].region+", rating: "+populationRating[i].rating);
     }
@@ -253,8 +262,17 @@ app.post('/', function (req, res) {
   console.log("\n");
   
   helper.getPopulationRating(function(populationRating){
-    for(var i=0;i<11;i++){
-      console.log("Population: Region: "+populationRating[i].region+", rating: "+populationRating[i].rating);
+	var prefData = {};
+
+    for (var i = 0; i < populationRating.length; i++) {
+      var region = populationRating[i].region;
+      var rating = populationRating[i].rating;
+      prefData[region] = rating;
+    }
+
+    sendPackage["Population"] = prefData;
+    for(key in sendPackage.Population){
+      console.log("Populations: Regions: "+ key+", rating: "+ sendPackage.Population[key]);
     }
   });
   console.log("\n");

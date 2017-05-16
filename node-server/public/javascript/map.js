@@ -1,4 +1,5 @@
 // pc = svg parent container
+ var colorScale;
 function drawMap(id){
 
   var dataname = '../data/map/topo_eer.json';
@@ -97,11 +98,17 @@ function drawMap(id){
     .html(function(d) {
       return d.properties.EER13NM;
     });
-
+    
     var min = d3.min(d3.values(ratings));
     var max = d3.max(d3.values(ratings));
+	if (!min){
+		min = 0.1;
+	}
+	if(!max){
+		max = 0.1;
+	}
 
-    var colorScale = d3.scale.linear().domain([0,min,max]).range(["#999999","#003300","#99ff99"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
+    var colorScale = d3.scale.linear().domain([0,min,max]).range(["#999999","#99ff99","#003300"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
 
     svg.call(tip);
     svg.append('text')
@@ -115,13 +122,13 @@ function drawMap(id){
   svg.append('text')
       .attr('x',width*0.92)
     .attr('y',20)
-    .text( '10')
+    .text('Max')
       .attr("font-family", "sans-serif")
       .attr("font-size", "1vw");
   svg.append('text')
       .attr('x',width*0.92)
     .attr('y',250)
-    .text( '0')
+    .text('Min')
       .attr("font-family", "sans-serif")
       .attr("font-size", "1vw");
 
@@ -134,7 +141,9 @@ function drawMap(id){
           //Get data value
           return colorScale(ratings[d.properties.EER13NM]);
         })
-        .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();})
+        .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();
+										drawChart(d.properties.EER13NM);
+										d3.selectAll('#chartcat').text(d.properties.EER13NM).transition();})
         .on('click', function(d){ if(topic !== ""){
                                     openNav(navid, d.properties.EER13NM, topic);
                                   } else {
@@ -142,7 +151,13 @@ function drawMap(id){
                                       console.log(" rating " + ratings.London);
                                       drawChart(d.properties.EER13NM);
                                     }
-                                  } 
+                                  }
+								  //svg.select('.mesh').style('stroke','blue').transition;
+								  d3.selectAll('.postcode_area')
+									.style(
+										'fill-opacity',0.8
+									);
+								  d3.select(this).style('fill-opacity', 1);
                                 })                  
         .append("svg:title")
               .attr("transform", function (d, i) { return "translate(" + path.centroid(d) + ")"; })
@@ -163,6 +178,26 @@ function isEmpty(obj) {
             return false;
     }
     return true;
+}
+
+function updateMap(){
+	var min = d3.min(d3.values(ratings));
+    var max = d3.max(d3.values(ratings));
+	if (!min){
+		min = 0.1;
+	}
+	if(!max){
+		max = 0.2;
+	}
+	colorScale = d3.scale.linear().domain([0,min,max]).range(["#999999","#99ff99","#003300"]);  //var colorScale = d3.scale.linear().range(["red","green"]);
+
+	d3.selectAll('#map').transition().duration(500);
+	d3.selectAll('title').transition().duration(500);
+	d3.selectAll('.postcode_area').style("fill", function(d) {
+          //Get data value
+          return colorScale(ratings[d.properties.EER13NM]);
+        }).transition().duration(500);
+	console.log(ratings);
 }
 
 function openNav(element, region, dataName) {
@@ -219,7 +254,8 @@ function setTopicBack(){
   document.getElementById(topic).style.backgroundColor = "#33b5e5";
   topic = "";
   setWindowSize();
-  drawMap("#right-sub-container-left", topic);
+  //drawMap("#right-sub-container-left", topic);
+  updateMap();
 
   console.log("topic " + topic);
 }
@@ -280,11 +316,11 @@ function drawChart(region){
       .style("fill", "#57893e")
       .attr("d", arc);
 
-  setInterval(function() {
+
     foreground.transition()
         .duration(750)
-        .call(arcTween, Math.random() * τ);
-  }, 1500);
+        .call(arcTween, ratings[region]* τ/5);
+  
 
   function arcTween(transition, newAngle) {
 
@@ -390,7 +426,8 @@ function getInt(myString){
             success : function(result) {
               console.log("ajax return " + result.London);
               ratings = result;
-              drawMap("#right-sub-container-left");
+              updateMap();
+			  //drawMap("#right-sub-container-left");
             }
           });
         });
@@ -406,12 +443,14 @@ function getInt(myString){
         topic = getTopic(elmnt);
         setWindowSize();
         for(key in data.regional){
+			console.log("topic " + topic + "  key " + key);
           if(topic === key){
-            console.log("topic " + topic + "  key " + key);
+            console.log("topics " + topic + "  keys " + key);
             ratings = data.regional[key];
           }
         }
-        drawMap("#right-sub-container-left");
+        updateMap();
+		//drawMap("#right-sub-container-left");
         elmnt.style.backgroundColor = " #87CEFA";
       }
 
@@ -424,7 +463,8 @@ function getInt(myString){
         topic = "";
         ratings = data.regional.Overall;
         setWindowSize();
-        drawMap("#right-sub-container-left");
+        updateMap();
+		//drawMap("#right-sub-container-left");
       }
       
       window.onload = function (){
@@ -437,7 +477,8 @@ function getInt(myString){
         console.log(data);
         setWindowSize();
         drawChart();
-        drawMap("#right-sub-container-left");    
+        updateMap();
+		//drawMap("#right-sub-container-left");    
       }
 
       // change mode
@@ -456,9 +497,9 @@ function getInt(myString){
 
           elemt.value = false;
           setTopicBack();
-          ratings = {};
-          
-          drawMap("#right-sub-container-left"); 
+          ratings= {"Scotland":null, "North East":null, "North West":0, "Yorkshire and The Humber":0, "Wales":0, "West Midlands":0, "East Midlands":0, "London":0, "Eastern":0, "South West":0, "South East":0};
+          updateMap();
+          //drawMap("#right-sub-container-left"); 
           document.getElementById("clientmsg").innerHTML = "";
           d3.select("#chart").remove();
           
@@ -474,8 +515,8 @@ function getInt(myString){
           ratings = data.regional.Overall;
 
           setTopicBack();
-          
-          drawMap("#right-sub-container-left"); 
+		  updateMap();
+          //drawMap("#right-sub-container-left"); 
 
           d3.select("#chart").remove();
           

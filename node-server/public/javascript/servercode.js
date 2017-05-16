@@ -790,7 +790,7 @@ getSocialRating: function(cb){
       var social_array=[];
       var social_rating=[];
     // getting data and working out rating for population   
-    path= fs.createReadStream("./public/data/cat/Social_Meta.csv")
+    path= fs.createReadStream("./public/data/cat/Social_Meta2.csv")
     csvStream= csv.fromStream(path,{headers: true}).on("data", function(d){
             dataStore.push( {
                             region : d["Regions"],
@@ -798,15 +798,17 @@ getSocialRating: function(cb){
                             good : Number(d["Healthy Population (%)"]),
                             fair : Number(d["Moderate Healthy Population (%)"]),
                             bad : Number(d["Unhealthy Population (%)"]),
-                            veryBad : Number(d["Very Unhealthy Population (%)"])});
+                            veryBad : Number(d["Very Unhealthy Population (%)"]),
+							co2percent : Number(d["co2 rating"])});
         
                     }).on("end", function(){
                 for(var i=0; i<regions.length;i++){
                     
                     dataStore.forEach(function(d){
-                        if(typeof(d.veryGood)!='undefined' && typeof(d.good)!='undefined' && typeof(d.fair)!='undefined' && typeof(d.bad)!='undefined' && typeof(d.veryBad)!='undefined'){
+						//console.log("social: Region: "+d.region+" very good: "+d.veryGood+" good "+d.good+" fair "+d.fair+" bad"+d.bad+" very bad "+d.veryBad+" co2 percent "+d.co2percent);
+                        if(typeof(d.veryGood)!='undefined' && typeof(d.good)!='undefined' && typeof(d.fair)!='undefined' && typeof(d.bad)!='undefined' && typeof(d.veryBad)!='undefined' && typeof(d.co2percent)!='undefined'){
                         if(d.region==regions[i] ){
-                            //console.log("social: Region: "+d.region+" very good: "+d.veryGood+" good "+d.good+" fair "+d.fair+" bad"+d.bad+" very bad "+d.veryBad);
+                            //console.log("social: Region: "+d.region+" very good: "+d.veryGood+" good "+d.good+" fair "+d.fair+" bad"+d.bad+" very bad "+d.veryBad+" co2 percent "+d.co2percent);
                             social_array.push(
                                 {
                                     region: regions[i],
@@ -814,7 +816,8 @@ getSocialRating: function(cb){
                                     good: d.good,
                                     fair: d.fair,
                                     bad: d.bad,
-                                    veryBad: d.veryBad
+                                    veryBad: d.veryBad,
+									co2Percent: d.co2percent
                                 }
                             );
                             
@@ -823,7 +826,8 @@ getSocialRating: function(cb){
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: (5.00).toFixed(2)
+										//rating: (5.00).toFixed(2)
+                                        rating: ((5.00+Number(d.co2percent))/2).toFixed(2)
                                     }
                                 );
                                 
@@ -833,7 +837,8 @@ getSocialRating: function(cb){
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: (4.00).toFixed(2)
+										//rating: (4.00).toFixed(2)
+										rating: ((4.00+Number(d.co2percent))/2).toFixed(2)
                                     }
                                 );
                             }
@@ -842,7 +847,8 @@ getSocialRating: function(cb){
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: (3.00).toFixed(2)
+										//rating: (3.00).toFixed(2)
+										rating: ((3.00+Number(d.co2percent))/2).toFixed(2)
                                     }
                                 );
                             }
@@ -851,7 +857,8 @@ getSocialRating: function(cb){
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: (2.00).toFixed(2)
+										//rating: (2.00).toFixed(2)
+                                        rating: ((2.00+Number(d.co2percent))/2).toFixed(2)
                                     }
                                 );
                             }
@@ -860,7 +867,8 @@ getSocialRating: function(cb){
                                 social_rating.push(
                                     {
                                         region: regions[i],
-                                        rating: (1.00).toFixed(2)
+										//rating: (1.00).toFixed(2)
+										rating: ((1.00+Number(d.co2percent))/2).toFixed(2)
                                     }
                                 );
                             }
