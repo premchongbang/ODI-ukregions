@@ -130,7 +130,7 @@ app.get('/', function (req, res) {
     sendPackage["Overall"] = prefData;
   });
 
-  res.render('index1.html');
+  res.render('index.html');
 })
 
 // This responds a POST request for the homepage
@@ -233,7 +233,7 @@ app.post('/', function (req, res) {
     sendPackage["Overall"] = prefData;
   });
 
-  res.render('index1.html');
+  res.render('index.html');
 })
 
 // This responds a GET request for abcd, abxcd, ab123cd, and so on
