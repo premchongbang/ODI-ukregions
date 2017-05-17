@@ -11,7 +11,7 @@
 }
 
 .slideThree:after {
-  content: 'Normal';
+  content: 'Standard';
   color: #27ae60;
   position: absolute;
   right: 10px;

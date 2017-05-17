@@ -388,16 +388,16 @@ function getInt(myString){
       function getCustomRating(elemt){
 
         if(elemt.value === "one"){
-          var topics = ["Education", "Crime", "Social"];
+          var topics = ["Housing", "Social", "Crime"];
           getData(topics);
         } else if(elemt.value === "two"){
-          var topics = ["Employment", "Crime", "Housing"];
+          var topics = ["Employment", "Economy", "Housing"];
           getData(topics);
         } else if(elemt.value === "three"){
-          var topics = ["Employment", "Crime", "Housing"];
+          var topics = ["Social", "Crime", "Population"];
           getData(topics);
         } else if(elemt.value === "four"){
-          var topics = ["Economy", "Education", "Social"];
+          var topics = ["Economy", "Population", "Crime"];
           getData(topics);
         }
       }
