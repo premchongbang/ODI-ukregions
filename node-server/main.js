@@ -44,12 +44,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Crime"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Crime: Region: "+crimeRating[i].region+", rating: "+crimeRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEconomyRating(function(economyRating){
     var prefData = {};
@@ -61,12 +56,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Economy"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Economy: Region: "+economyRating[i].region+", rating: "+economyRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEducationRating(function(educationRating){
     var prefData = {};
@@ -78,12 +68,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Education"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Education: Region: "+educationRating[i].region+", rating: "+educationRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEmploymentRating(function(employmentRating){
     var prefData = {};
@@ -95,12 +80,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Employment"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Employment: Region: "+employmentRating[i].region+", rating: "+employmentRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getHousingRating(function(housingRating){
     var prefData = {};
@@ -112,12 +92,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Housing"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Housing: Region: "+housingRating[i].region+", rating: "+housingRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getPopulationRating(function(populationRating){
 	var prefData = {};
@@ -129,11 +104,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Population"] = prefData;
-    for(var i=0;i<11;i++){
-      console.log("Population: Region: "+populationRating[i].region+", rating: "+populationRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getSocialRating(function(socialRating){
     var prefData = {};
@@ -145,12 +116,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Social"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Social: Region: "+socialRating[i].region+", rating: "+socialRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getOverallRating(function(overallRating){
     var prefData = {};
@@ -162,12 +128,7 @@ app.get('/', function (req, res) {
     }
 
     sendPackage["Overall"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Overall: Region: "+overallRating[i].region+", rating: "+overallRating[i].rating);
-    }
   });
-  console.log("\n");
 
   res.render('index1.html');
 })
@@ -186,12 +147,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Crime"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Crime: Region: "+crimeRating[i].region+", rating: "+crimeRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEconomyRating(function(economyRating){
     var prefData = {};
@@ -203,12 +159,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Economy"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Economy: Region: "+economyRating[i].region+", rating: "+economyRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEducationRating(function(educationRating){
     var prefData = {};
@@ -220,12 +171,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Education"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Education: Region: "+educationRating[i].region+", rating: "+educationRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getEmploymentRating(function(employmentRating){
     var prefData = {};
@@ -237,12 +183,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Employment"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Employment: Region: "+employmentRating[i].region+", rating: "+employmentRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getHousingRating(function(housingRating){
     var prefData = {};
@@ -254,12 +195,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Housing"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Housing: Region: "+housingRating[i].region+", rating: "+housingRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getPopulationRating(function(populationRating){
 	var prefData = {};
@@ -271,11 +207,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Population"] = prefData;
-    for(key in sendPackage.Population){
-      console.log("Populations: Regions: "+ key+", rating: "+ sendPackage.Population[key]);
-    }
   });
-  console.log("\n");
   
   helper.getSocialRating(function(socialRating){
     var prefData = {};
@@ -287,12 +219,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Social"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Social: Region: "+socialRating[i].region+", rating: "+socialRating[i].rating);
-    }
   });
-  console.log("\n");
   
   helper.getOverallRating(function(overallRating){
     var prefData = {};
@@ -304,12 +231,7 @@ app.post('/', function (req, res) {
     }
 
     sendPackage["Overall"] = prefData;
-
-    for(var i=0;i<11;i++){
-      console.log("Overall: Region: "+overallRating[i].region+", rating: "+overallRating[i].rating);
-    }
   });
-  console.log("\n");
 
   res.render('index1.html');
 })

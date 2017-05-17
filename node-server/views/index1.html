@@ -33,14 +33,13 @@
       <div class="left-sub-container" id="left-container">
 
         <div class="header" style="cursor:default;" id="mh1">
-          <h2 alt="Overall Ratings"> UK </br>
-            Regions
-          </h2>
+          <h2 alt="Overall Ratings"> UK </br> </h2>
+          <h2 style="font-size: 2.5vw;"> REGIONS </h2> 
         </div>
 
         <div class="buton-holder2" id="bh1">
-          <h2 style="font-size: 2.4vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
-          <h3> Best </h3>
+          <h2 style="font-family: Arial, Helvetica, sans-serif; font-size: 2vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
+          <h3 style="text-decoration: underline;"> Best for</h3>
           <ul>
             <li>
               <input type="radio" onclick="getCustomRating(this)" id="1" value="one" name="selector">
@@ -78,7 +77,7 @@
         </div>
 
         <div class="button-holder" style="display: none;" id="bh2">
-          <h2 style="font-size: 2.4vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
+          <h2 style="font-family: Arial, Helvetica, sans-serif; font-size: 2vw; text-align: center; margin: 0 0 10px 0;"> DashBoard </h2>
           <ul style="padding: 0; margin: 0;" id="btndb">
             <li onclick="changeTopic(this)" style="font-family: 'Trocchi', serif; font-size: 1.3vw;" id="Education"> Education </br> 
             <i class="fa fa-book" aria-hidden="true"> </i>
@@ -179,11 +178,11 @@
             <br>
             <button id="submits" style="margin-left: 10px;" value= "submit"> Send </button>
           </div>
-          
-          <p  id="clientmsg"> </p>
-          <div class="chart-container" id="graph" style="width: 80%; height:30%; margin-left:25%;">
+
+          <p  id="clientmsg" style="width:100%; text-align: center; font-weight: bold;"> </p>
+          <div class="chart-container" id="graph" style="width: 80%; height:30%; margin-left:30%;">
           </div>
-		  <p id="chartcat"></p>
+		      <p id="chartcat" style="width:100%; text-align: center;"></p>
 
           <div id="drop2" align=center></div>
           </div>

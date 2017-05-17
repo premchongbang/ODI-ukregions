@@ -143,12 +143,13 @@ function drawMap(id){
         })
         .on('mouseover',function(d){svg.selectAll('text.tiptext').text(d.properties.EER13NM).transition();
 										drawChart(d.properties.EER13NM);
-										d3.selectAll('#chartcat').text(d.properties.EER13NM).transition();})
-        .on('click', function(d){ if(topic !== ""){
+                    d3.selectAll('#clientmsg').text(topic).transition();
+                    d3.selectAll('#chartcat').text(d.properties.EER13NM).transition();
+                  })
+        .on('click', function(d){ if(topic !== "Overall Score"){
                                     openNav(navid, d.properties.EER13NM, topic);
                                   } else {
                                     if(!isEmpty(ratings)){
-                                      console.log(" rating " + ratings.London);
                                       drawChart(d.properties.EER13NM);
                                     }
                                   }
@@ -197,7 +198,6 @@ function updateMap(){
           //Get data value
           return colorScale(ratings[d.properties.EER13NM]);
         }).transition().duration(500);
-	console.log(ratings);
 }
 
 function openNav(element, region, dataName) {
@@ -221,7 +221,7 @@ function getTopic(elmnt){
         topic = strArray[1];
 
         if(topic == ""){
-          topic = "";
+          topic = "Overall Score";
         }
         return topic;
 }
@@ -252,12 +252,12 @@ function setWindowSize() {
 //setting topics
 function setTopicBack(){
   document.getElementById(topic).style.backgroundColor = "#33b5e5";
-  topic = "";
+  topic = "Overall Score";
   setWindowSize();
   //drawMap("#right-sub-container-left", topic);
   updateMap();
 
-  console.log("topic " + topic);
+  console.log("Set topic Back" + topic);
 }
 
 function drawChart(region){
@@ -327,7 +327,6 @@ function drawChart(region){
     transition.attrTween("d", function(d) {
 
         var interpolate = d3.interpolate(d.endAngle, newAngle);
-        console.log("test one " + interpolate + " " + d.endAngle + " " + newAngle );
         
         return function(t) {
             
@@ -351,7 +350,7 @@ function getInt(myString){
 
 // index code 
 
-      var topic = ""; // need to change it 
+      var topic = "Overall Score"; // need to change it 
       
       var data = {regional: {}}; // stores regional ratings 
       var ratings = {}; // stores rating values
@@ -365,18 +364,20 @@ function getInt(myString){
 
           if((p1==p2)||(p1==p3)||(p2==p3)) {
             document.getElementById("clientmsg").innerHTML = "Please select unique categories.";
+             document.getElementById("chartcat").innerHTML = "";
           } else {
             //var customList = {ID : 3, one : $("#p1").val(), two : $("#p1").val(), three : $("#p1").val()};
             document.getElementById("clientmsg").innerHTML = "";
+            document.getElementById("chartcat").innerHTML = "";
             $.ajax({
               type : 'POST',
               url : '/getPreferenceRating',
               headers : {'Content-Type' : 'application/json'},
               data : JSON.stringify({ID : this.id, one : p1, two : p2, three : p3}),
               success : function(result) {
-                console.log("ajax return " + result.London);
                 ratings = result;
-                drawMap("#right-sub-container-left");
+                updateMap();
+                setPref();
               }
             });
           }
@@ -424,10 +425,9 @@ function getInt(myString){
             headers : {'Content-Type' : 'application/json'},
             data : JSON.stringify({ID : "custom", one : customList[0], two : customList[1], three : customList[2]}),
             success : function(result) {
-              console.log("ajax return " + result.London);
               ratings = result;
               updateMap();
-			  //drawMap("#right-sub-container-left");
+              setPref();
             }
           });
         });
@@ -436,35 +436,43 @@ function getInt(myString){
       function changeTopic(elmnt){
 
         //getting onclicked topic
-        if(topic !== ""){
+        if(topic !== "Overall Score"){
           document.getElementById(topic).style.backgroundColor = "#33b5e5";
         }
 
         topic = getTopic(elmnt);
         setWindowSize();
         for(key in data.regional){
-			console.log("topic " + topic + "  key " + key);
+			     console.log("topic " + topic + "  key " + key);
           if(topic === key){
-            console.log("topics " + topic + "  keys " + key);
             ratings = data.regional[key];
           }
         }
         updateMap();
-		//drawMap("#right-sub-container-left");
         elmnt.style.backgroundColor = " #87CEFA";
       }
 
       // setting topic to initial state
       function setTopicBack(){
-        if(topic !== ""){
+        if(topic !== "Overall Score"){
           document.getElementById(topic).style.backgroundColor = "#33b5e5"; 
         }
 
-        topic = "";
+        topic = "Overall Score";
         ratings = data.regional.Overall;
         setWindowSize();
         updateMap();
-		//drawMap("#right-sub-container-left");
+      }
+
+      // setting topic to initial state
+      function setPref(){
+        if(topic !== "Overall Score"){
+          document.getElementById(topic).style.backgroundColor = "#33b5e5"; 
+        }
+
+        topic = "Overall Score";
+        setWindowSize();
+        updateMap();
       }
       
       window.onload = function (){
@@ -474,11 +482,12 @@ function getInt(myString){
       }
 
       window.onresize = function(){
-        console.log(data);
         setWindowSize();
-        drawChart();
-        updateMap();
-		//drawMap("#right-sub-container-left");    
+        drawMap("#right-sub-container-left"); 
+        
+        document.getElementById("clientmsg").innerHTML = "";
+        document.getElementById("chartcat").innerHTML = "";
+        d3.select("#chart").remove();
       }
 
       // change mode
@@ -501,6 +510,7 @@ function getInt(myString){
           updateMap();
           //drawMap("#right-sub-container-left"); 
           document.getElementById("clientmsg").innerHTML = "";
+           document.getElementById("chartcat").innerHTML = "";
           d3.select("#chart").remove();
           
           document.getElementById("mh1").style.display = "unset";
@@ -517,6 +527,8 @@ function getInt(myString){
           setTopicBack();
 		  updateMap();
           //drawMap("#right-sub-container-left"); 
+          document.getElementById("clientmsg").innerHTML = "";
+          document.getElementById("chartcat").innerHTML = "";
 
           d3.select("#chart").remove();
           
