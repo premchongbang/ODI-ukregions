@@ -145,20 +145,19 @@ function drawMap(id){
 										drawChart(d.properties.EER13NM);
                     d3.selectAll('#clientmsg').text(topic).transition();
                     d3.selectAll('#chartcat').text(d.properties.EER13NM).transition();
+					d3.selectAll('.postcode_area')
+									.style(
+										'fill-opacity',0.8
+									);
+					d3.select(this).style('fill-opacity', 1);
                   })
         .on('click', function(d){ if(topic !== "Overall Score"){
                                     openNav(navid, d.properties.EER13NM, topic);
                                   } else {
                                     if(!isEmpty(ratings)){
-                                      drawChart(d.properties.EER13NM);
+                                      //drawChart(d.properties.EER13NM);
                                     }
                                   }
-								  //svg.select('.mesh').style('stroke','blue').transition;
-								  d3.selectAll('.postcode_area')
-									.style(
-										'fill-opacity',0.8
-									);
-								  d3.select(this).style('fill-opacity', 1);
                                 })                  
         .append("svg:title")
               .attr("transform", function (d, i) { return "translate(" + path.centroid(d) + ")"; })
@@ -260,6 +259,8 @@ function setTopicBack(){
   console.log("Set topic Back" + topic);
 }
 
+  var end_Angle = 0;
+
 function drawChart(region){
 
   for(key in ratings){
@@ -269,6 +270,8 @@ function drawChart(region){
   }
 
   d3.select("#chart").remove();
+  
+
       
   var container = document.getElementById("graph");
 
@@ -312,14 +315,15 @@ function drawChart(region){
       .attr("d", arc);
 
   var foreground = svg.append("path")
-      .datum({endAngle: 0 * τ})
+      .datum({endAngle:  end_Angle})
       .style("fill", "#57893e")
       .attr("d", arc);
-
-
+  
+  
     foreground.transition()
         .duration(750)
         .call(arcTween, ratings[region]* τ/5);
+	console.log(end_Angle);
   
 
   function arcTween(transition, newAngle) {
@@ -333,6 +337,8 @@ function drawChart(region){
             d.endAngle = interpolate(t);
             
             text.text(Math.round((d.endAngle/τ)*100)+'%');
+			
+			end_Angle = d.endAngle;
             
             return arc(d);
         };
