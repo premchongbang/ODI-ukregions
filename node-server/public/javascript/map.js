@@ -151,6 +151,7 @@ function drawMap(id){
 									);
 					d3.select(this).style('fill-opacity', 1);
                   })
+		.on('mouseout',function(d){d3.select(this).style('fill-opacity', 0.8);})
         .on('click', function(d){ if(topic !== "Overall Score"){
                                     openNav(navid, d.properties.EER13NM, topic);
                                   } else {
