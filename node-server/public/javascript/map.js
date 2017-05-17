@@ -363,8 +363,8 @@ function getInt(myString){
               p3 = $("#p3").val();
 
           if((p1==p2)||(p1==p3)||(p2==p3)) {
+            removeChart();
             document.getElementById("clientmsg").innerHTML = "Please select unique categories.";
-             document.getElementById("chartcat").innerHTML = "";
           } else {
             //var customList = {ID : 3, one : $("#p1").val(), two : $("#p1").val(), three : $("#p1").val()};
             document.getElementById("clientmsg").innerHTML = "";
@@ -378,6 +378,7 @@ function getInt(myString){
                 ratings = result;
                 updateMap();
                 setPref();
+                removeChart();
               }
             });
           }
@@ -428,13 +429,19 @@ function getInt(myString){
               ratings = result;
               updateMap();
               setPref();
+              removeChart()
             }
           });
         });
       }
 
-      function changeTopic(elmnt){
+      function removeChart(){
+        d3.select("#chart").remove();
+        document.getElementById("clientmsg").innerHTML = "";
+        document.getElementById("chartcat").innerHTML = "";
+      }
 
+      function changeTopic(elmnt){
         //getting onclicked topic
         if(topic !== "Overall Score"){
           document.getElementById(topic).style.backgroundColor = "#33b5e5";
@@ -449,6 +456,7 @@ function getInt(myString){
           }
         }
         updateMap();
+        removeChart();
         elmnt.style.backgroundColor = " #87CEFA";
       }
 
@@ -484,10 +492,7 @@ function getInt(myString){
       window.onresize = function(){
         setWindowSize();
         drawMap("#right-sub-container-left"); 
-        
-        document.getElementById("clientmsg").innerHTML = "";
-        document.getElementById("chartcat").innerHTML = "";
-        d3.select("#chart").remove();
+        removeChart();
       }
 
       // change mode
@@ -509,9 +514,7 @@ function getInt(myString){
           ratings= {"Scotland":null, "North East":null, "North West":0, "Yorkshire and The Humber":0, "Wales":0, "West Midlands":0, "East Midlands":0, "London":0, "Eastern":0, "South West":0, "South East":0};
           updateMap();
           //drawMap("#right-sub-container-left"); 
-          document.getElementById("clientmsg").innerHTML = "";
-           document.getElementById("chartcat").innerHTML = "";
-          d3.select("#chart").remove();
+          removeChart();
           
           document.getElementById("mh1").style.display = "unset";
           document.getElementById("bh1").style.display = "unset";
@@ -525,12 +528,8 @@ function getInt(myString){
           ratings = data.regional.Overall;
 
           setTopicBack();
-		  updateMap();
-          //drawMap("#right-sub-container-left"); 
-          document.getElementById("clientmsg").innerHTML = "";
-          document.getElementById("chartcat").innerHTML = "";
-
-          d3.select("#chart").remove();
+		      updateMap(); //drawMap("#right-sub-container-left"); 
+          removeChart();
           
           document.getElementById("mh1").style.display = "none";
           document.getElementById("bh1").style.display = "none";
