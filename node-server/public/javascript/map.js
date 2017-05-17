@@ -214,12 +214,12 @@ function getTopic(elmnt){
   var str = elmnt.innerHTML;
   
   var strArray = str.split(" ");
-        topic = strArray[1];
+  topic = strArray[1];
 
-        if(topic == ""){
-          topic = "Overall Score";
-        }
-        return topic;
+  if(topic == ""){
+    topic = "Overall Score";
+  }
+  return topic;
 }
 
 // setting window size for responsive layout
@@ -250,8 +250,8 @@ function setTopicBack(){
   document.getElementById(topic).style.backgroundColor = "#33b5e5";
   topic = "Overall Score";
   setWindowSize();
-  //drawMap("#right-sub-container-left", topic);
   updateMap();
+  removeChart();
 
   //console.log("Set topic Back" + topic);
 }
@@ -463,6 +463,7 @@ function getInt(myString){
         topic = "Overall Score";
         ratings = data.regional.Overall;
         setWindowSize();
+        removeChart();
         updateMap();
       }
 
