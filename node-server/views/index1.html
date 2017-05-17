@@ -29,6 +29,12 @@
 
   <body>
     <div class="container" id="container">
+      <div id="myNav" class="overlay">
+        <div id="drop" align=center></div>
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav('myNav')"> &times; </a>
+        <div class="overlay-content" id="overlayDisplay">
+        </div>
+      </div>
 
       <div class="left-sub-container" id="left-container">
 
@@ -113,19 +119,10 @@
       </div>
 
       <div class="right-sub-container" id="right-container">
-        <div id="myNav" class="overlay">
-          <div id="drop" align=center></div>
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav('myNav')">&times;</a>
-            <div class="overlay-content" id="overlayDisplay">
-            </div>
-        </div>
-
-        <div class="right-sub-container left" id="right-sub-container-left">
-          
+        <div class="right-sub-container left" id="right-sub-container-left"> 
         </div>
 
         <div class ="right-sub-container right" id="right-sub-container-right">
-          
           <div class="slideThree">  
             <input type="checkbox" onclick="changeMode(this)" value=true id="slideThree" name="check" checked />
             <label for="slideThree"> Mode </label>
@@ -199,7 +196,7 @@
 
       // get ragional ratings
       socket.on('renderMap', function(data2){
-        console.log("test one " + data2.Crime.London);
+        //console.log("test one " + data2.Crime.London);
         data.regional = data2;
       });
     </script>

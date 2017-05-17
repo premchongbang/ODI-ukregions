@@ -4,7 +4,7 @@ function drawMap(id){
 
   var dataname = '../data/map/topo_eer.json';
 
-  console.log("topic " + topic);
+  //console.log("topic " + topic);
 
   d3.select("#map").remove();
   d3.select("#chart").remove();
@@ -154,10 +154,6 @@ function drawMap(id){
 		.on('mouseout',function(d){d3.select(this).style('fill-opacity', 0.8);})
         .on('click', function(d){ if(topic !== "Overall Score"){
                                     openNav(navid, d.properties.EER13NM, topic);
-                                  } else {
-                                    if(!isEmpty(ratings)){
-                                      //drawChart(d.properties.EER13NM);
-                                    }
                                   }
                                 })                  
         .append("svg:title")
@@ -257,23 +253,15 @@ function setTopicBack(){
   //drawMap("#right-sub-container-left", topic);
   updateMap();
 
-  console.log("Set topic Back" + topic);
+  //console.log("Set topic Back" + topic);
 }
 
   var end_Angle = 0;
 
 function drawChart(region){
 
-  for(key in ratings){
-    if(region === key){
-      console.log("match . key " + key + " region " + region + " value " + ratings[key]);
-    }
-  }
-
   d3.select("#chart").remove();
   
-
-      
   var container = document.getElementById("graph");
 
   var τ = 2 * Math.PI,
@@ -324,7 +312,7 @@ function drawChart(region){
     foreground.transition()
         .duration(750)
         .call(arcTween, ratings[region]* τ/5);
-	console.log(end_Angle);
+	//console.log(end_Angle);
   
 
   function arcTween(transition, newAngle) {
@@ -338,9 +326,7 @@ function drawChart(region){
             d.endAngle = interpolate(t);
             
             text.text(Math.round((d.endAngle/τ)*100)+'%');
-			
-			end_Angle = d.endAngle;
-            
+			end_Angle = d.endAngle;      
             return arc(d);
         };
     });
@@ -386,6 +372,7 @@ function getInt(myString){
                 updateMap();
                 setPref();
                 removeChart();
+                document.getElementById("clientmsg").innerHTML = "Custom Overall Score";
               }
             });
           }
@@ -436,7 +423,7 @@ function getInt(myString){
               ratings = result;
               updateMap();
               setPref();
-              removeChart()
+              removeChart();
             }
           });
         });
@@ -457,7 +444,7 @@ function getInt(myString){
         topic = getTopic(elmnt);
         setWindowSize();
         for(key in data.regional){
-			     console.log("topic " + topic + "  key " + key);
+			     //console.log("topic " + topic + "  key " + key);
           if(topic === key){
             ratings = data.regional[key];
           }

@@ -251,7 +251,6 @@ app.post('/getPreferenceRating', function(req, res){
 
   for(key in obj){
     storeCategory.push(obj[key])
-    console.log("key " + obj[key]);
   }
 
   helper.getPreferenceRating(storeCategory[1].toLowerCase(), storeCategory[2].toLowerCase(), storeCategory[3].toLowerCase(), function(preferenceRating){
