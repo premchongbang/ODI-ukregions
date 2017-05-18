@@ -137,7 +137,10 @@ option{
 }
 
 .footer {
-    width: 100%;
-    padding: 15px;
+    width: 95%;
+    position: relative;
+    left: 2%;
+    padding: 10px;
     float: left;
+    margin-top: 5px;
 }
